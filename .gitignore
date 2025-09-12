@@ -1,0 +1,45 @@
+# Node modules
+node_modules/
+**/node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Build / Output folders
+dist/
+build/
+**/dist/
+**/build/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+
+# Dependency directories for frontend if applicable
+Frontend/node_modules/
+Frontend/build/
+Frontend/dist/
+
+# Misc
+Notes.txt
+/Useful Information/
