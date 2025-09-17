@@ -1,0 +1,70 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navbar container pinned to top */
+.navbar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 0.5rem 2rem;
+    z-index: 1000;
+}
+
+/* Remove Bootstrap's default background and border */
+.custom-navbar {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Heading styles */
+.heading {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+    color: white;
+}
+
+/* Nav link styles */
+.navbar-nav .nav-link {
+    height: fit-content;
+    width: fit-content;    
+    padding: 0 1rem 0 1rem;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+    margin-left: 2rem;
+    color: white !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover{
+    color: white;
+    background-color: orange;    
+    transform: scale(1.05);
+}
+
+.navbar-nav{
+    margin-right: 1.5rem;
+}
+
+.loginButton{
+    margin-top: 0.5rem;
+    padding: 0 1.5rem 0 1.5rem !important;
+    height: fit-content;
+    width: fit-content;
+    background-color: orange;
+    border-radius: 0.5rem;
+    color: white !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.loginButton:hover{
+    color: orange !important;
+    background-color: white !important;
+    transform: scale(1.05);
+}

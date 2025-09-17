@@ -8,6 +8,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import path from "path"
 import ConnectToSocket from "./Controllers/ConnectToSocket.js"
+import userRoutes from "./Routes/usersRoute.js"
 // Configure the .env file path
 
 dotenv.config({path: path.resolve("../.env")})
@@ -24,7 +25,8 @@ app.set("port", 3000) // Set the apps port number
 app.use(cors())
 app.use(express.json({limit: "40kb"}))
 app.use(express.urlencoded({limit: "40kb", extended: true})) // Here limit is being used so that the payload is not getting to heavy traffic in case of some misuse 
-
+// Setting the user routes in teh server
+app.use("/api/v1/users", userRoutes)
 const startServer = async()=>{
     // Connecting with the MongoDB database
 
@@ -43,4 +45,5 @@ startServer()
 app.get("/", (req, res)=>{
     res.send("This is the home route")
 })
+
 

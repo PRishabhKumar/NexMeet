@@ -1,0 +1,84 @@
+html, body {
+    height: 100%;   
+    width: 100%;
+    margin: 0 !important;
+    background-image: url("/background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-x: hidden;
+}
+
+/* Remove the default margins paddings from Bootstrap */
+
+/* Remove container padding */
+.container, .container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Remove row negative margins */
+.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Remove column padding */
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6,
+.col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+
+.mainContentContainer {
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 1;    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainContent{
+    margin-left: 0 !important;
+    height: 100% !important;
+    width: 100% !important;   
+    color: white !important; 
+}
+
+.leftPart{
+    margin-right: 50rem;
+}
+
+.mainHeading h1{
+    font-size: 40px;
+}
+
+.smallerHeading{
+    font-size: 20px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.colouredHeading{
+    color: orange;
+}
+
+.getStartedButton{
+    height: fit-content;
+    width: fit-content;
+    background-color: orange;
+    font-size: 20px;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    color: white;
+    border-radius: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.getStartedButton:hover{
+    color: white;
+    background-color: black;
+    transform: scale(1.05);
+}
