@@ -20,7 +20,14 @@ function LandingPage() {
                             <a className="getStartedButton" href="">Get Started</a>
                         </div>
                     </div>
-                    <div className="col-8"></div>
+                    <div className="col-8 rightPart">                        
+                        <img className="image" src="/VideoCalling1.jpg" alt="" />    
+                        <div className="otherImages">                            
+                            <img className="smallImage" src="/smallImage1.jpeg" alt="" />                               
+                            <img className="smallImage" src="/smallImage2.jpg" alt="" />
+                            <img className="smallImage" src="/smallImage3.jpg" alt="" />                         
+                        </div>                                            
+                    </div>
                 </div>
             </div>
         </>

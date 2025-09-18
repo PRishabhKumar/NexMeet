@@ -1,5 +1,5 @@
 html, body {
-    height: 100%;   
+    height: 100%;
     width: 100%;
     margin: 0 !important;
     background-image: url("/background.png");
@@ -34,21 +34,10 @@ html, body {
 .mainContentContainer {
     margin: 0 !important;
     padding: 0 !important;
-    z-index: 1;    
+    z-index: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.mainContent{
-    margin-left: 0 !important;
-    height: 100% !important;
-    width: 100% !important;   
-    color: white !important; 
-}
-
-.leftPart{
-    margin-right: 50rem;
 }
 
 .mainHeading h1{
@@ -82,3 +71,117 @@ html, body {
     background-color: black;
     transform: scale(1.05);
 }
+
+.mainContent {
+    height: 100% !important;
+    width: 100% !important;
+    color: white !important;
+    display: flex; /* enable flexbox */
+    justify-content: space-between; /* text left, images right */
+    align-items: center; /* vertical centering */
+    margin-top: 10rem;
+    margin-bottom: 10rem;
+    margin-right: 5rem;
+}
+
+.leftPart {
+    flex: 1; /* take up available space */
+    margin-right: 20rem;
+}
+
+.rightPart {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem; /* spacing between images */
+    flex: 1; /* balance with left part */
+    position: relative;
+}
+
+.image {
+    height: 25rem;
+    width: 25rem;
+    object-fit: cover;
+    border-radius: 1.5rem;
+}
+
+.image:hover{
+    cursor: pointer;
+}
+
+.otherImages{
+    top: 50%;
+    left: 50%;
+    width: 30rem;
+    height: 15rem;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    position: absolute;
+}
+
+.otherImages .smallImage {
+    position: absolute;
+    height: 10rem;
+    width: 10rem;
+    border-radius: 1.5rem;
+    object-fit: cover;
+    padding: 0.5rem;
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);    
+}
+/*Add different transition timings for better animations*/
+
+.otherImages .smallImage:nth-child(1) {
+    transition: 
+        opacity 0.6s ease-in-out 0.1s, 
+        transform 0.6s ease-in-out 0.1s, 
+        top 0.6s ease-in-out 0.1s, 
+        left 0.6s ease-in-out 0.1s;
+}
+
+.otherImages .smallImage:nth-child(2) {
+    transition: 
+        opacity 0.7s ease-in-out 0.2s, 
+        transform 0.7s ease-in-out 0.2s, 
+        top 0.7s ease-in-out 0.2s, 
+        left 0.7s ease-in-out 0.2s;
+}
+
+.otherImages .smallImage:nth-child(3) {
+    transition: 
+        opacity 0.8s ease-in-out 0.3s, 
+        transform 0.8s ease-in-out 0.3s, 
+        top 0.8s ease-in-out 0.3s, 
+        left 0.8s ease-in-out 0.3s;
+}
+
+.otherImages .smallImage:nth-child(4) {
+    transition: 
+        opacity 0.9s ease-in-out 0.4s, 
+        transform 0.9s ease-in-out 0.4s, 
+        top 0.9s ease-in-out 0.4s, 
+        left 0.9s ease-in-out 0.4s;
+}
+
+
+/* Show + animate on hover */
+.image:hover + .otherImages .smallImage {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Positions */
+.image:hover + .otherImages .smallImage:nth-child(1) {
+    top: 150%;
+    left: 120%;
+}
+.image:hover + .otherImages .smallImage:nth-child(2) {
+    top: 130%;
+    left: -40%;
+}
+.image:hover + .otherImages .smallImage:nth-child(3) {
+    top: -30%;
+    left: -30%;
+}
+
