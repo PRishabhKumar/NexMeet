@@ -1,4 +1,4 @@
-html, body {
+/* html, body {
     height: 100%;
     width: 100%;
     margin: 0 !important;
@@ -7,7 +7,7 @@ html, body {
     background-position: center;
     background-repeat: no-repeat;
     overflow-x: hidden;
-}
+} */
 
 /* Remove the default margins paddings from Bootstrap */
 
@@ -44,19 +44,34 @@ html, body {
     font-size: 40px;
 }
 
+.desc{
+    display: flex;
+    gap: 0.5rem;
+}
+
 .smallerHeading{
     font-size: 20px;
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
 
+.companyName{
+    margin-top: 2.2rem;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+}
+
 .colouredHeading{
     color: orange;
 }
 
+
+
 .getStartedButton{
+    position: relative;
     height: fit-content;
-    width: fit-content;
+    width: 9rem;
     background-color: orange;
     font-size: 20px;
     padding: 0.5rem 1rem 0.5rem 1rem;
@@ -64,13 +79,32 @@ html, body {
     border-radius: 1rem;
     text-decoration: none;
     transition: all 0.3s ease-in-out;
+    display: inline-block;
 }
 
+
 .getStartedButton:hover{
-    color: white;
-    background-color: black;
+    color: white;    
     transform: scale(1.05);
+    box-shadow: 0 0 1.5rem orange, inset 0 0 1.5rem orange; 
+    width: 11rem;   
 }
+
+.arrow{  
+    opacity: 0;
+    position: absolute;      
+    left: -20%;
+    margin-top: 0.4rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.getStartedButton:hover .arrow{
+    left: 80%;
+    opacity: 1;
+}
+
+
+
 
 .mainContent {
     height: 100% !important;
@@ -105,7 +139,7 @@ html, body {
 }
 
 .image:hover{
-    cursor: pointer;
+    cursor: pointer;    
 }
 
 .otherImages{
@@ -128,40 +162,40 @@ html, body {
     opacity: 0;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(0.5);    
+    transform: translate(-50%, -50%) scale(0.5);      
 }
 /*Add different transition timings for better animations*/
 
 .otherImages .smallImage:nth-child(1) {
     transition: 
-        opacity 0.6s ease-in-out 0.1s, 
-        transform 0.6s ease-in-out 0.1s, 
-        top 0.6s ease-in-out 0.1s, 
-        left 0.6s ease-in-out 0.1s;
+        opacity 0.3s ease-in-out 0.05s, 
+        transform 0.3s ease-in-out 0.05s, 
+        top 0.3s ease-in-out 0.05s, 
+        left 0.3s ease-in-out 0.05s;
 }
 
 .otherImages .smallImage:nth-child(2) {
     transition: 
-        opacity 0.7s ease-in-out 0.2s, 
-        transform 0.7s ease-in-out 0.2s, 
-        top 0.7s ease-in-out 0.2s, 
-        left 0.7s ease-in-out 0.2s;
+        opacity 0.35s ease-in-out 0.1s, 
+        transform 0.35s ease-in-out 0.1s, 
+        top 0.35s ease-in-out 0.1s, 
+        left 0.35s ease-in-out 0.1s;
 }
 
 .otherImages .smallImage:nth-child(3) {
     transition: 
-        opacity 0.8s ease-in-out 0.3s, 
-        transform 0.8s ease-in-out 0.3s, 
-        top 0.8s ease-in-out 0.3s, 
-        left 0.8s ease-in-out 0.3s;
+        opacity 0.4s ease-in-out 0.15s, 
+        transform 0.4s ease-in-out 0.15s, 
+        top 0.4s ease-in-out 0.15s, 
+        left 0.4s ease-in-out 0.15s;
 }
 
 .otherImages .smallImage:nth-child(4) {
     transition: 
-        opacity 0.9s ease-in-out 0.4s, 
-        transform 0.9s ease-in-out 0.4s, 
-        top 0.9s ease-in-out 0.4s, 
-        left 0.9s ease-in-out 0.4s;
+        opacity 0.45s ease-in-out 0.2s, 
+        transform 0.45s ease-in-out 0.2s, 
+        top 0.45s ease-in-out 0.2s, 
+        left 0.45s ease-in-out 0.2s;
 }
 
 

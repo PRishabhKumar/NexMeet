@@ -12,7 +12,7 @@
     width: 100%;
     padding: 0.5rem 2rem;
     z-index: 1000;
-    position: fixed;
+    position: fixed;    
 }
 
 /* Remove Bootstrap's default background and border */
@@ -41,16 +41,27 @@
     margin-left: 2rem;
     color: white !important;
     transition: all 0.3s ease-in-out;
+    display: flex;
+    gap: 1rem;
 }
 
-.navbar-nav .nav-link:hover{
+.navbar-nav .nav-link:hover {
     color: white;
-    background-color: orange;    
+    text-shadow: 
+        0 0 1.5rem orange,
+        0 0 2rem orange,
+        0 0 2.5rem orange,
+        0 0 3rem orange,
+        0 0 3.5rem orange,
+        0 0 4rem orange,
+        0 0 4.5rem orange,
+        0 0 5rem orange;
     transform: scale(1.05);
 }
 
+
 .navbar-nav{
-    margin-right: 1.5rem;
+    margin-right: 2.5rem;
 }
 
 .loginButton{
@@ -68,4 +79,5 @@
     color: orange !important;
     background-color: white !important;
     transform: scale(1.05);
+    text-shadow: none !important;
 }

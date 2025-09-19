@@ -1,0 +1,212 @@
+/* Add this CSS reset at the very top of your file */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.landingPageContainer{
+    height: 100vh;
+    width: 100vw;
+    background: url("/background.png ");
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+/* Remove all centering from landingPageContainer */
+.mainContentContainer{
+    height: 100vh;
+    width: 100vw;
+    color: white;
+    display: flex;
+    align-items: center;
+    margin: 0;    
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+}
+
+.leftPart {         
+    width: 30%;
+    height: 100vh;    
+    margin-left: 4rem;
+    margin-top: 2rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.rightPart {
+    width: 70%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;   
+    align-items: center; 
+    position: relative;        
+    margin-top: 2rem;
+    padding: 2rem;
+    overflow: visible; /* Allow images to be visible outside bounds */
+}
+
+.mainHeading h1{
+    font-size: 40px;
+    margin: 0;
+}
+
+.desc{
+    display: flex;
+    gap: 0.5rem;
+}
+
+.smallerHeading{
+    font-size: 20px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.companyName{
+    margin-top: 2.2rem;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.colouredHeading{
+    color: orange;
+}
+
+.getStartedButton{
+    position: relative;
+    height: fit-content;
+    width: 9rem;
+    background-color: orange;
+    font-size: 20px;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    color: white;
+    border-radius: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+    margin: 1.5rem;
+}
+
+.getStartedButton:hover{
+    color: white;    
+    transform: scale(1.05);
+    box-shadow: 0 0 1.5rem orange, inset 0 0 1.5rem orange; 
+    width: 11rem;   
+}
+
+.arrow{  
+    opacity: 0;
+    position: absolute;      
+    left: -20%;
+    margin-top: 0.4rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.getStartedButton:hover .arrow{
+    left: 80%;
+    opacity: 1;
+}
+
+/* Styling for the images */
+
+.image {
+    height: 25rem;
+    width: 25rem;
+    object-fit: cover;
+    border-radius: 1.5rem;
+    z-index: 2;
+    position: relative;
+}
+
+.image:hover{
+    cursor: pointer;    
+}
+
+.otherImages{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40rem; /* Increased from 30rem to give more space */
+    height: 40rem; /* Increased from 15rem to give more space */
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.otherImages .smallImage {
+    position: absolute;
+    height: 8rem; /* Reduced from 10rem */
+    width: 8rem;  /* Reduced from 10rem */
+    border-radius: 1.5rem;
+    object-fit: cover;
+    padding: 0.3rem; /* Reduced padding */
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);      
+}
+
+/*Add different transition timings for better animations*/
+
+.otherImages .smallImage:nth-child(1) {
+    transition: 
+        opacity 0.3s ease-in-out 0.05s, 
+        transform 0.3s ease-in-out 0.05s, 
+        top 0.3s ease-in-out 0.05s, 
+        left 0.3s ease-in-out 0.05s;
+}
+
+.otherImages .smallImage:nth-child(2) {
+    transition: 
+        opacity 0.35s ease-in-out 0.1s, 
+        transform 0.35s ease-in-out 0.1s, 
+        top 0.35s ease-in-out 0.1s, 
+        left 0.35s ease-in-out 0.1s;
+}
+
+.otherImages .smallImage:nth-child(3) {
+    transition: 
+        opacity 0.4s ease-in-out 0.15s, 
+        transform 0.4s ease-in-out 0.15s, 
+        top 0.4s ease-in-out 0.15s, 
+        left 0.4s ease-in-out 0.15s;
+}
+
+.otherImages .smallImage:nth-child(4) {
+    transition: 
+        opacity 0.45s ease-in-out 0.2s, 
+        transform 0.45s ease-in-out 0.2s, 
+        top 0.45s ease-in-out 0.2s, 
+        left 0.45s ease-in-out 0.2s;
+}
+
+.rightPart:hover .otherImages .smallImage {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* FIXED: Better positioning that stays within viewport */
+.rightPart:hover .otherImages .smallImage:nth-child(1) {
+    top: 15%; /* Top right */
+    left: 80%;
+}
+.rightPart:hover .otherImages .smallImage:nth-child(2) {
+    top: 80%; /* Bottom left */
+    left: 20%;
+}
+.rightPart:hover .otherImages .smallImage:nth-child(3) {
+    top: 20%; /* Top left */
+    left: 10%;
+}
