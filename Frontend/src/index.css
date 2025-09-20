@@ -4,3 +4,7 @@
   box-sizing: border-box;
   overflow: hidden;
 }
+
+html body{
+  background-color: black;
+}
