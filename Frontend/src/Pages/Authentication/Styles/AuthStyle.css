@@ -1,5 +1,3 @@
-
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 * {
@@ -30,13 +28,38 @@ body {
     align-items: center;
     justify-content: center;
     padding: 0;
-    background: url('/loginImage1.jpg') no-repeat center center;
+    /* Modern video conferencing background with technology theme */
+    background: 
+        linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.75) 50%, rgba(15, 23, 42, 0.85) 100%),
+        url('https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') center center;
     background-size: cover;
     background-repeat: no-repeat;    
+    background-attachment: fixed;
     position: relative;
     overflow: hidden;
 }
 
+/* Add subtle animated overlay for tech ambiance */
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(217, 70, 239, 0.05) 0%, transparent 50%);
+    animation: techGlow 8s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes techGlow {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
 
 .auth-wrapper {
   width: 100%;
@@ -45,12 +68,15 @@ body {
   z-index: 2;
   margin: 0 auto;
   padding: 1rem;
-  border-radius: 1.5rem; /* optional, for nice edges */
-  background: rgba(15, 23, 42, 0.5); /* semi-transparent background */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
-
 
 @keyframes fadeInUp {
   from {
@@ -155,19 +181,39 @@ body {
 }
 
 .form-container {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
   backdrop-filter: blur(20px);
   border-radius: 1.5rem;
   padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    0 25px 50px -12px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
   position: relative;
   animation: slideInScale 0.8s ease-out 0.2s both;
   width: 100%;
   max-width: 100%;
   overflow: hidden;
+}
+
+/* Add subtle tech-inspired pattern overlay */
+.form-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 25%),
+    radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 25%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.form-container > * {
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes slideInScale {
@@ -191,13 +237,14 @@ body {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(15, 23, 42, 0.9);
   border-radius: 0.875rem;
   padding: 0.25rem;
-  border: 1px solid rgba(71, 85, 105, 0.5);
+  border: 1px solid rgba(71, 85, 105, 0.6);
   margin-bottom: 1.5rem;
   width: 100%;
   max-width: 100%;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .toggle-btn {
@@ -237,7 +284,9 @@ body {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   border-radius: 0.625rem;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  box-shadow: 
+    0 4px 12px rgba(99, 102, 241, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
   z-index: 1;
 }
 
@@ -293,14 +342,15 @@ body {
 .form-input {
   width: 100%;
   padding: 1rem 1rem 1rem 3rem;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(71, 85, 105, 0.6);
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(71, 85, 105, 0.7);
   border-radius: 0.875rem;
   color: #f1f5f9;
   font-size: 0.95rem;
   outline: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .form-input::placeholder {
@@ -311,9 +361,10 @@ body {
 .form-input:focus {
   border-color: #6366f1;
   box-shadow: 
-    0 0 0 3px rgba(99, 102, 241, 0.1),
-    0 4px 12px rgba(99, 102, 241, 0.15);
-  background: rgba(15, 23, 42, 0.8);
+    0 0 0 3px rgba(99, 102, 241, 0.15),
+    0 4px 12px rgba(99, 102, 241, 0.2),
+    inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: rgba(15, 23, 42, 0.85);
   transform: translateY(-1px);
 }
 
@@ -345,16 +396,15 @@ body {
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 
-    0 10px 25px -8px rgba(99, 102, 241, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
+    0 10px 25px -8px rgba(99, 102, 241, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
   animation: slideInUp 0.6s ease-out 0.4s both;
 }
 
 /*Show password styles*/
-
 .password-toggle {
   position: absolute;
-  right: 1rem;        /* place it inside input on the right */
+  right: 1rem;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
@@ -366,18 +416,19 @@ body {
   justify-content: center;
   padding: 0;
   color: #64748b;
+  transition: all 0.3s ease;
 }
 
 .password-toggle svg {
   width: 1.25rem;
   height: 1.25rem;
+  transition: all 0.3s ease;
 }
 
 .password-toggle:hover svg {
   color: #6366f1;
   transform: scale(1.1);
 }
-
 
 @keyframes slideInUp {
   from {
@@ -408,8 +459,8 @@ body {
 .submit-btn:hover {
   transform: translateY(-2px);
   box-shadow: 
-    0 15px 35px -5px rgba(99, 102, 241, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
+    0 15px 35px -5px rgba(99, 102, 241, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.15);
 }
 
 .submit-btn:active {
@@ -443,11 +494,11 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(71, 85, 105, 0.6), transparent);
+  background: linear-gradient(to right, transparent, rgba(71, 85, 105, 0.7), transparent);
 }
 
 .divider span {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
   padding: 0 1rem;
   font-size: 0.875rem;
   color: #94a3b8;
@@ -467,8 +518,8 @@ body {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.875rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(71, 85, 105, 0.6);
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(71, 85, 105, 0.7);
   border-radius: 0.75rem;
   color: #e2e8f0;
   font-weight: 500;
@@ -476,6 +527,7 @@ body {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .social-btn svg {
@@ -484,16 +536,21 @@ body {
 }
 
 .social-btn:hover {
-  background: rgba(51, 65, 85, 0.8);
-  border-color: rgba(100, 116, 139, 0.8);
+  background: rgba(51, 65, 85, 0.85);
+  border-color: rgba(100, 116, 139, 0.9);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.3);
+  box-shadow: 
+    0 8px 25px -8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.05);
 }
 
-/*Styling for messages section*/
+/*************************************************** Styling for messages section ******************************************************************/
 
+/* Enhanced Message Container with Multiple Animation Options */
+
+/* Default animation: Smooth Slide with Bounce */
 .message-container {
-  position: fixed;       /* fixed at top of viewport */
+  position: fixed;
   top: 1rem;
   left: 50%;
   transform: translateX(-50%);
@@ -501,8 +558,8 @@ body {
   max-width: 420px;
   z-index: 9999;
   text-align: center;
-  pointer-events: none; /* prevent blocking clicks */
-  animation: slideDown 0.5s ease-out forwards;
+  pointer-events: none;
+  animation: slideDownBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .success-message, .error-message {
@@ -511,64 +568,238 @@ body {
   color: #fff;
   font-weight: 600;
   font-size: 1rem;
-  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.2);
-  animation: fadeInOut 4s forwards;
+  box-shadow: 
+    0 0.5rem 1rem rgba(0,0,0,0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  animation: messageAppear 5s ease-out forwards;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Success styling */
+/* Add a subtle shimmer effect */
+.success-message::before, .error-message::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 1.5s ease-out 0.5s;
+}
+
+/* Success styling with pulse */
 .success-message {
   background: linear-gradient(90deg, #00c853, #b9f6ca);
   color: #004d40;
+  animation: messageAppear 5s ease-out forwards, successPulse 2s ease-in-out 0.5s;
 }
 
-/* Error styling */
+/* Error styling with shake */
 .error-message {
   background: linear-gradient(90deg, #d50000, #ff8a80);
   color: #fff;
+  animation: messageAppear 5s ease-out forwards, errorShake 0.6s ease-in-out 0.2s;
 }
 
-/* Slide down animation */
-@keyframes slideDown {
+/* Animation Keyframes */
+
+/* Enhanced slide down with bounce */
+@keyframes slideDownBounce {
   0% {
-    transform: translate(-50%, -100%);
+    transform: translate(-50%, -100%) scale(0.8);
     opacity: 0;
   }
+  60% {
+    transform: translate(-50%, 10px) scale(1.05);
+    opacity: 1;
+  }
   100% {
-    transform: translate(-50%, 0);
+    transform: translate(-50%, 0) scale(1);
     opacity: 1;
   }
 }
 
-/* Fade in and fade out animation */
-@keyframes fadeInOut {
-  0% { opacity: 0; }
-  10% { opacity: 1; }
-  85% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-
-@media (max-width: 480px) {
-  .auth-container {
-    padding: 0.5rem;
+/* Main message appearance with scale and fade */
+@keyframes messageAppear {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.9);
   }
-  
-  .form-container {
-    padding: 1.5rem;
+  10% { 
+    opacity: 1; 
+    transform: scale(1);
   }
-  
-  .auth-title {
-    font-size: 1.75rem;
+  85% { 
+    opacity: 1; 
+    transform: scale(1);
   }
-  
-  .social-buttons {
-    grid-template-columns: 1fr;
+  95% {
+    opacity: 0.5;
+    transform: scale(0.98);
+  }
+  100% { 
+    opacity: 0; 
+    transform: scale(0.95);
   }
 }
 
+/* Shimmer effect */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Success pulse effect */
+@keyframes successPulse {
+  0%, 100% { 
+    box-shadow: 
+      0 0.5rem 1rem rgba(0,0,0,0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+  50% { 
+    box-shadow: 
+      0 0.5rem 1.5rem rgba(0, 200, 83, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.2),
+      0 0 20px rgba(0, 200, 83, 0.3);
+  }
+}
+
+/* Error shake effect */
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
+  20%, 40%, 60%, 80% { transform: translateX(3px); }
+}
+
+/************************************************************** Alternative animation options /*******************************************************/
+
+
+/* Set the left paramters for the following animations at once */
+
+
+
+.message-container.slide-rotate,
+.message-container.pop-elastic,
+.message-container.fade-grow {
+  left: 50%;      /* keep at center */
+  
+}
+
+/* Animation 2 */
+
+.message-container.slide-rotate {
+  animation: slideFromRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes slideFromRight {
+  0% {
+    transform: translateX(-50%) translateY(-50px) rotate(15deg) scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-50%) translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Animation 3 */
+
+.message-container.pop-elastic {
+  animation: popElastic 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+@keyframes popElastic {
+  0% {
+    transform: translateX(-50%) translateY(-100%) scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(-50%) translateY(-20px) scale(1.1);
+    opacity: 1;
+  }
+  70% {
+    transform: translateX(-50%) translateY(5px) scale(0.95);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Animation 4 */
+.message-container.fade-grow {
+  animation: fadeGrow 0.6s ease-out forwards;
+}
+
+@keyframes fadeGrow {
+  0% {
+    transform: translateX(-50%) translateY(-50%) scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 480px) {
+  .message-container {
+    width: 95%;
+    max-width: 350px;
+  }
+  
+  .success-message, .error-message {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.9rem;
+  }
+  
+  /* Reduce bounce on mobile for better performance */
+  .message-container {
+    animation: slideDownBounce 0.6s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .message-container {
+    animation: simpleSlideDown 0.3s ease-out forwards !important;
+  }
+  
+  .success-message, .error-message {
+    animation: simpleFade 4s ease-out forwards !important;
+  }
+  
+  .success-message::before, .error-message::before {
+    display: none;
+  }
+  
+  @keyframes simpleSlideDown {
+    0% {
+      transform: translate(-50%, -20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes simpleFade {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+}
+
+/************************************************** Media queries for responsive design **************************************************************/
 @media (max-width: 480px) {
   .auth-container {
     padding: 0.5rem;
+    background-attachment: scroll; /* Better performance on mobile */
   }
   
   .form-container {
@@ -594,5 +825,9 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  
+  .auth-container::before {
+    animation: none;
   }
 }

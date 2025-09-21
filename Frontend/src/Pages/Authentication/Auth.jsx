@@ -6,6 +6,8 @@ import {useRef} from 'react'
 import { color } from "motion/react";
 import { AuthContext } from "../../Contexts/AuthContext.jsx";
 
+import httpStatus from "http-status"
+
 
 
 
@@ -30,6 +32,8 @@ function Auth() {
 
     const handleAuthnetication = async ()=>{
         try{
+            setMessage('') // clear any messages or error from before
+            setError('')
             // Register
             if(formState === 1){
                 let result = await handleRegister(name, username, password)
@@ -54,7 +58,7 @@ function Auth() {
             }
         }
         catch(err){
-            if(err && err.response.data.message){
+            if(err && err.response && err.response.data && err.response.data.message){
                 setError(err.response.data.message)
             }
             else{
@@ -70,7 +74,7 @@ function Auth() {
             <div className="auth-container">
 
                 {(message || error) && (
-                    <div className="messageContainer">
+                    <div className="message-container slideDownBounce">
                         {message && <p className="success-message">{message}</p>}
                         {error && <p className="error-message">{error}</p>}
                     </div>

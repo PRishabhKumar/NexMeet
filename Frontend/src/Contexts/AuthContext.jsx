@@ -38,9 +38,9 @@ export const AuthProvider = ({ children }) => {
                 password: password
             })
             if(request.status === httpStatus.OK){
-                localStorage.setItem("token", request.data.token)
-                return "Login Successful !!"
+                localStorage.setItem("token", request.data.token)                
             }
+            return request.data.message || "Login Successful !!!"
         }
         catch(err){
             throw err;

@@ -15,10 +15,10 @@ function Navbar() {
                                     <a className="nav-link active" aria-current="page" href="#">Join as Guest</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link active" href="#">Register</a>
+                                    <a className="nav-link active" href="/auth">Register</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link active loginButton" href="#">Login</a>
+                                    <a className="nav-link active loginButton" href="/auth">Login</a>
                                 </li>                            
                             </ul>                        
                         </div>

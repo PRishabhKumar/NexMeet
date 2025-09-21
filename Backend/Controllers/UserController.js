@@ -46,17 +46,22 @@ const authenticateUser = async (req, res)=>{
         }
         const user = await User.findOne({username})
         if(!user){
-            return(res.status(httpsStatus.NOT_FOUND).json({message: "No user found with teh given crednetials"}))
+            return(res.status(httpStatus.NOT_FOUND).json({message: "No user found with teh given crednetials"}))
         }
         // Checking the password if the user is found
 
-        if(bcrypt.compare(password, user.password)){
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if(isMatch){
             // in case of successful authentication, generate the token
             const token = crypto.randomBytes(20).toString("hex"); // generate a hex token of 20 bytes
             user.token = token; 
             // Save the user again to update details
             await user.save();
-            return res.status(httpStatus.OK).json({message: "User authenticated successfully !!!"})
+            return res.status(httpStatus.OK).json({message: "User authenticated successfully !!!", token})
+        }
+        else{
+            return res.status(httpStatus.UNAUTHORIZED).json({message: "Invalid credentials. Please try again !!!"})
         }
 
     }
