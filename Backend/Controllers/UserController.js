@@ -61,7 +61,7 @@ const authenticateUser = async (req, res)=>{
             return res.status(httpStatus.OK).json({message: "User authenticated successfully !!!", token})
         }
         else{
-            return res.status(httpStatus.UNAUTHORIZED).json({message: "Invalid credentials. Please try again !!!"})
+            return res.status(httpStatus.UNAUTHORIZED).json({message: "Invalid credentials. Please try again"})
         }
 
     }

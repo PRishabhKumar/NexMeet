@@ -49,7 +49,17 @@ function VideoCall() {
 
     return ( 
         <>
-            <h1 style={{color: "white"}}>This is the video calling page !!!</h1>
+            <div>
+                {
+                    askForUsername === true ? 
+                    <div>
+                        
+                    </div> : 
+                    <>
+                        <h1>Here we will have the full code for the video calling
+                    </h1></>
+                }
+            </div>
         </>
     );
 }
