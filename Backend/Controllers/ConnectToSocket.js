@@ -14,6 +14,8 @@ const ConnectToSocket = (server) => {
     }); // Here the server refers to the HTTP server that wraps the express app
     ioServer.on("connection", (socket) => {
 
+        console.log("A user is connected")
+
         // Section to join the meeting
         socket.on("join-meeting", (path) => {
             if (connections[path] === undefined) {

@@ -2,6 +2,7 @@ import "./Styles/VideoCall.css"
 import server from "../../environment.js"
 import {useState, useEffect, useRef} from 'react'
 import Input from "./Input.jsx"
+import io from 'socket.io-client'
 const serverPath = server
 
 let connections = {}
@@ -16,7 +17,7 @@ const peerConfigConections = {
 
 function VideoCall() {
 
-    let socketref = useRef();
+    let socketRef = useRef();
     let socketIdRef = useRef();
     let localVideoRef = useRef();
     // State varaibles
@@ -47,6 +48,115 @@ function VideoCall() {
     // The below varaible handles the different videos in the call
 
     let [videos, setVideos] = useState([])
+
+    // Function to handle the event of recieving a message from the server
+
+    let messageRecievedFromServer = ()=>{
+
+    }
+
+    // Fucntion to add the chat messages 
+
+    let addChatMessage = ()=>{
+
+    }
+
+    const connectToSocketServer = ()=>{
+        socketRef.current = io.connect(serverPath, {secure: false})
+
+        socketRef.current.on('signal', messageRecievedFromServer); // this is teh signal from the backend server whenever some mesage is recieved from the server and we are catching and handling it here
+
+        socketRef.current.on('connect', ()=>{
+            socketRef.current.emit('join-call'); // when a user connects, then he is basically trying to join the call and the signal for that will be emitted from here and caught by the backend server where we will handle adding the person to the call and so on
+            socketIdRef.current = socketRef.current.id; // after connecitng this socket would have got an ID
+
+            socketRef.current.on('chat-message', addChatMessage); // here we are catching the event of one user sending a mesasge to the other
+
+            socketRef.current.on('user-left', (id)=>{
+                setVideo()(videos.filter((video)=>{
+                    video.socketId !== id; // keep all the other videos except for the one that has left
+                }))
+            })
+
+            socketRef.current.on('user-joined', (id, clients)=>{
+                clients.forEach((socketListId)=>{
+
+                    connections[socketListId] = new RTCPeerConnection(peerConfigConections)
+
+                    connections[socketListId].onicecandidate = (event)=>{
+                        if(event.candidate != null){
+                            socketRef.current.emit('signal', socketListId, JSON.stringify({'ice': event.candidate}))
+                        }
+                    }
+
+                    connections[socketListId].onaddstream = (event)=>{
+                        // Here we are simply checking is the video already exists because if it does then addition of a stream that there have some changes in audio/video i.e. turning them on/off or screen sharing. Hence if the video already exists, then we are simply adding the stream to it and if not then we will create a new video
+                        let videoExists = videoRef.current.find(video => video.socketId === socketListId)
+
+                        if(videoExists){
+                            const updateVideo = videos.map(video => {
+                                video.socketId === socketListId ? {...video, stream : event.stream} : video
+                            })
+                            videoRef.current = updateVideo
+                        }
+                        else{
+                            // here we are adding a new stream
+                            const newVideo = {
+                                socketId: socketListId,
+                                stream: event.stream,
+                                autoPlay: true,
+                                playsinline: true
+                            }
+                            setVideos(videos=>{
+                                const updatedVideos = [...videos, newVideo] 
+                                videoRef.current = updatedVideos
+                                return updatedVideos
+                            })
+                        }
+                    }
+
+                    
+                    if(window.localStream != undefined  && window.localStream != null){
+                        connections[socketListId].addStream(window.localStream)
+                    }
+                    else{
+                        console.log("We have black silence here")
+                        // implement black silence here
+                    }
+
+
+                })
+
+                if(id === socketIdRef.current){
+                    for(let id2 in connections){
+                        if(id2 === socketIdRef.current){
+                            continue;
+                        }
+                        else{
+                            try{
+                                connections[id2].addStream(window.localStream)
+                            }
+                            catch(err){
+                                throw err;
+                            }
+                            connections[id2].createOffer()
+                            .then((description)=>{
+                                connections[id2].setLocalDescrpition(description)
+                                .then(()=>{
+                                    socketRef.current.emit('signal', id2, JSON.stringify({"sdp":  connections[id2].setLocalDescrpition}))
+                                })
+                            })
+                            .catch(e=>{
+                                console.log(`This error occured : ${e}`)
+                            })
+                        }
+                    }
+                }
+
+            })
+
+        })
+    }
 
     const getMediaPermissions = async ()=>{
         try{
@@ -108,6 +218,11 @@ function VideoCall() {
         connectToSocketServer();
     }
 
+    let connect = ()=>{
+        setAskForUsername(false); 
+        getMedia(); // after the username is entered, we will disable the asking for username again and will proceed to connct to the socket server and update the audio and video
+    }
+
     return ( 
         <>
             <div className="contentContainer">
@@ -117,7 +232,7 @@ function VideoCall() {
                         <h2 style={{color: "white"}}>Enter into the lobby</h2>
                         <h3>Enter your username</h3>
                         <input type="text" value={username} className="username" onChange={(e)=>{setUsername(e.target.value)}} />
-                        <button>Connect</button>
+                        <button onClick={connect}>Connect</button>
                         <div>
                             <video ref={localVideoRef} autoPlay muted></video>
                         </div>
