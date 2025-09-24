@@ -49,10 +49,43 @@ function VideoCall() {
 
     let [videos, setVideos] = useState([])
 
-    // Function to handle the event of recieving a message from the server
+    // Function to handle the event of recieving a message (i.e. an offer) from the server
 
-    let messageRecievedFromServer = ()=>{
-
+    let messageRecievedFromServer = (fromId, message)=>{
+        let signal = JSON.parse(message); // extract the message becuase it is sent in the JSON format
+        // This simp]ly means that the sender and the reciever cannot be the same as you cannot send messages to yourself
+        if(fromId !== socketIdRef.current){
+            if(signal.sdp){
+                connections[fromId].setRemoteDescription(new RTCSessionDescription(signal.sdp))
+                .then(()=>{
+                    if(signal.sdp.type === "offer"){
+                        // if this socket has recieved an offer from some other socket, then we are sending the answer for that offer
+                        connections[fromId].createAnswer()
+                        .then((description)=>{
+                            connections[fromId].setLocalDescrpition(description)
+                            .then(()=>{
+                                socketRef.current.emit('signal',  fromId, JSON.stringify({'sdp': connections[fromId].localDescription}))
+                            })
+                            .catch(err=>{
+                                console.log(`This error occured : ${err}`)
+                            })
+                        })
+                        .catch(err =>{
+                            console.log(`This error occured : ${err}`)
+                        })
+                    }
+                })
+                .catch(err =>{
+                    console.log(`This error occured : ${err}`)
+                })
+                if(signal.ice){
+                    connections[fromId].addIceCandidate(new RTCIceCandidate(signal.ice))
+                    .catch(err =>{
+                        console.log(`This error occured : ${err}`)
+                    })
+                }
+            }
+        }                
     }
 
     // Fucntion to add the chat messages 
@@ -120,8 +153,7 @@ function VideoCall() {
                         connections[socketListId].addStream(window.localStream)
                     }
                     else{
-                        console.log("We have black silence here")
-                        // implement black silence here
+                        let blackSilence = (...args)=> new MediaStream([blackScreen(...args), silence(...args)])
                     }
 
 
@@ -183,8 +215,102 @@ function VideoCall() {
     // Here we are using the conditional useEffect because we want these things to execute only when there are any changes in the audio or video
 
     const getUserMediaSuccess = (stream)=>{
-        
+        try{
+            // first we are getting all the tracks that are currently there and we are stopping them for now
+            window.localStream.getTracks().foroEach((track)=>{
+                track.stop()
+            })            
+        }   
+        catch(err){
+            console.log(`This error occured : ${err}`)
+        }   
+        window.localStream = stream; // re-initialize with the new stream
+        localVideoRef.current.srcObject = stream; // this is used to update any changes made to the media like turning on/off the audio/video that will be rendered on the UI
+
+        // now we are iterating through the connections and ignoring if the ID is the same as the curent socket ID and if not, then we are adding the updated stream to all other sockets
+
+        for (let id in connections){
+            if(id === socketIdRef.current){
+                continue;
+            }
+            
+            connections[id].addStream(window.localStream); // here we are adding teh updated stream for all the sockets except for our own
+
+            // Now we create another offer
+
+            connections[id].createOffer()
+            .then((description)=>{
+                connections[id].setLocalDescription(description)
+                .then(()=>{
+                    socketIdRef.current.emit('signal', id ,JSON.stringify({'sdp': connections[i].localDescription}))
+                })
+                .catch(err =>{
+                    console.log(`This error occured : ${err}`)
+                })
+            })
+            .catch(err =>{
+                console.log(`This error occured : ${err}`)
+            })
+        }
+
+        stream.getTracks().forEach((track)=>{
+            track.onended = ()=>{
+                setVideo(false);
+                setAudio(false);
+
+                try{
+                    let tracks = localVideoRef.current.srcObject.getTracks()
+                    tracks.forEach((track)=>{
+                        track.stop()
+                    })
+                }
+                catch(err){
+                    console.log(`This error occured : ${err}`)
+                }
+
+                // Add black silence here 
+
+                for(let id in connections){
+                    connections[id].addStream(window.localStream)
+                    connections[id].createOffer()
+                    .then((description)=>{
+                        connections[id].setLocalDescription(description)
+                        .then(()=>{
+                            socketIdRef.current.emit('signal', id, JSON.stringify({'sdp': connections[id].localDescription}))
+                        })
+                        .catch(err =>{
+                            console.log(`This error occured : ${err}`)
+                        })
+                    })
+                    .catch(err =>{
+                        console.log(`This error occured : ${err}`)
+                    })
+                }
+
+            }
+        })
+
     }
+
+    let silence = ()=>{
+        let context = new AudioContext()
+        let oscialltor = context.createOscillator() // this creates an oscillatorNode which is a soruce representing a preiodic waveform and basically generates a constant tone (Here this constant tone will be nothing but silence)
+
+        let destination = oscialltor.connect(context.createMediaStreamDestination());
+        oscialltor.start(); // This starts producing the 'constant tone of silence'
+        context.resume(); // now we can resume the audio context after adding the silence 
+        return Object.assign(destination.stream.getAudioTracks()[0], {enabled: false})
+    }
+
+    // now we are creating the function for the black screen
+
+    let blackScreen = ({width = 640, height = 480} = {})=>{
+        let canvas = Object.assign(document.createElement('canvas'), {width, height})
+        canvas.getContext('2d').fillRect(0, 0, width, height);
+        let stream = canvas.captureStream();
+        return Object.assign(stream.getVideoTracks()[0], {enabled: false})
+    }
+
 
     const getUserMedia = ()=>{
         if((video && videoPermissionsAvailable) || (audio && audioPermissionsAvailable)){
