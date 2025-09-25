@@ -25,7 +25,7 @@ const ConnectToSocket = (server) => {
             onlineTime[socket.id] = new Date();
 
             for (let i = 0; i < connections[path].length; i++) {
-                ioServer.to(connections[path][i]).emit("user connected", socket.id, connections[path])
+                ioServer.to(connections[path][i]).emit("user-joined", socket.id, connections[path])
             }
             if (messages[path] !== undefined) {
                 for (let i = 0; i < messages[path].length; i++) {

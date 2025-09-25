@@ -100,7 +100,7 @@ function VideoCall() {
         socketRef.current.on('signal', messageRecievedFromServer); // this is the signal from the backend server whenever some mesage is recieved from the server and we are catching and handling it here
 
         socketRef.current.on('connect', ()=>{
-            socketRef.current.emit('join-call', username); // Send username when joining
+            socketRef.current.emit('join-meeting', username); // Send username when joining
             socketIdRef.current = socketRef.current.id; // after connecting this socket would have got an ID
 
             socketRef.current.on('chat-message', addChatMessage); // here we are catching the event of one user sending a mesasge to the other
