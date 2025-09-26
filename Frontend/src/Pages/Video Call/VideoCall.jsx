@@ -21,45 +21,29 @@ function VideoCall() {
     let socketIdRef = useRef();
     let localVideoRef = useRef();
     // State variables
-    // These variables are used to determine whether the user has given the permissions to use the video and audio resources or not
     let [videoPermissionsAvailable, setVideoPermissionsAvailable] = useState(true);
     let [audioPermissionsAvailable, setAudioPermissionsAvailable] = useState(true);
-    // These variables are used to control the turning on and off of the audio and video
     let [video, setVideo] = useState();
     let [audio, setAudio] = useState();
     let [screenShare, setScreenShare] = useState();
-
     let [showModal, setShowModal] = useState();
     let [screenShareAvailable, setScreenShareAvailable] = useState();
-
     let [messages, setMessages] = useState();
-
     let [message, setMessage] = useState("");
-    
-    // The variable below is used to control the notifications whenever we recieve a new message from someone
     let [newMessages, setNewMessages] = useState(0); 
-
-    let [askForUsername, setAskForUsername] = useState(true); // this is used to handle the cases of guest logins
-
+    let [askForUsername, setAskForUsername] = useState(true);
     let [username, setUsername] = useState("")
-
     const videoRef = useRef([])
-
-    // The below variable handles the different videos in the call
-
     let [videos, setVideos] = useState([])
 
     // Function to handle the event of recieving a message (i.e. an offer) from the server
-
     let messageRecievedFromServer = (fromId, message)=>{
-        let signal = JSON.parse(message); // extract the message becuase it is sent in the JSON format
-        // This simp]ly means that the sender and the reciever cannot be the same as you cannot send messages to yourself
+        let signal = JSON.parse(message);
         if(fromId !== socketIdRef.current){
             if(signal.sdp){
                 connections[fromId].setRemoteDescription(new RTCSessionDescription(signal.sdp))
                 .then(()=>{
                     if(signal.sdp.type === "offer"){
-                        // if this socket has recieved an offer from some other socket, then we are sending the answer for that offer
                         connections[fromId].createAnswer()
                         .then((description)=>{
                             connections[fromId].setLocalDescription(description)
@@ -67,51 +51,54 @@ function VideoCall() {
                                 socketRef.current.emit('signal',  fromId, JSON.stringify({'sdp': connections[fromId].localDescription}))
                             })
                             .catch(err=>{
-                                console.log(`This error occured : ${err}`)
+                                console.log(`Answer creation error: ${err}`)
                             })
                         })
                         .catch(err =>{
-                            console.log(`This error occured : ${err}`)
+                            console.log(`Answer creation error: ${err}`)
                         })
                     }
                 })
                 .catch(err =>{
-                    console.log(`This error occured : ${err}`)
+                    console.log(`Set remote description error: ${err}`)
                 })
             }
             if(signal.ice){
                 connections[fromId].addIceCandidate(new RTCIceCandidate(signal.ice))
                 .catch(err =>{
-                    console.log(`This error occured : ${err}`)
+                    console.log(`ICE candidate error: ${err}`)
                 })
             }
         }                
     }
 
-    // Function to add the chat messages 
-
     let addChatMessage = ()=>{
-
+        // Chat implementation
     }
 
     const connectToSocketServer = ()=>{
         socketRef.current = io.connect(serverPath, {secure: false})
 
-        socketRef.current.on('signal', messageRecievedFromServer); // this is the signal from the backend server whenever some mesage is recieved from the server and we are catching and handling it here
+        socketRef.current.on('signal', messageRecievedFromServer);
 
         socketRef.current.on('connect', ()=>{
-            socketRef.current.emit('join-meeting', username); // Send username when joining
-            socketIdRef.current = socketRef.current.id; // after connecting this socket would have got an ID
+            socketRef.current.emit('join-meeting', window.location.href);
+            socketIdRef.current = socketRef.current.id;
 
-            socketRef.current.on('chat-message', addChatMessage); // here we are catching the event of one user sending a mesasge to the other
+            socketRef.current.on('chat-message', addChatMessage);
 
             socketRef.current.on('user-left', (id)=>{
                 console.log('User left:', id);
-                setVideos(prevVideos => prevVideos.filter((video) => video.socketId !== id)); // Use functional update to avoid stale closure
+                setVideos(prevVideos => prevVideos.filter((video) => video.socketId !== id));
+                // Clean up connection
+                if (connections[id]) {
+                    connections[id].close();
+                    delete connections[id];
+                }
             })
 
             socketRef.current.on('user-joined', (id, clients)=>{
-                console.log('User joined:', id, 'Clients:', clients); // Debug log
+                console.log('User joined:', id, 'Clients:', clients);
                 console.log('My socket ID:', socketIdRef.current);
                 
                 clients.forEach((socketListId)=>{
@@ -128,76 +115,87 @@ function VideoCall() {
                         }
                     }
 
-                    connections[socketListId].onaddstream = (event)=>{
-                        console.log('Stream received from:', socketListId, event.stream); // Debug log
+                    // FIXED: Use modern ontrack instead of deprecated onaddstream
+                    connections[socketListId].ontrack = (event)=>{
+                        console.log('Track received from:', socketListId, event.streams[0]);
                         
-                        setVideos(prevVideos => {
-                            // Check if video already exists
-                            let videoExists = prevVideos.find(video => video.socketId === socketListId);
-                            
-                            if(videoExists){
-                                console.log('Updating existing video for:', socketListId);
-                                // Update existing video
-                                const updatedVideos = prevVideos.map(video => 
-                                    video.socketId === socketListId ? {...video, stream: event.stream} : video
-                                );
-                                videoRef.current = updatedVideos;
-                                return updatedVideos;
-                            }
-                            else{
-                                console.log('Adding new video for:', socketListId);
-                                // Add new video
-                                const newVideo = {
-                                    socketId: socketListId,
-                                    stream: event.stream,
-                                    username: `User ${socketListId}`, // You can get actual username from server
-                                    autoPlay: true,
-                                    playsinline: true
-                                };
-                                const updatedVideos = [...prevVideos, newVideo];
-                                videoRef.current = updatedVideos;
-                                return updatedVideos;
-                            }
-                        });
+                        if (event.streams && event.streams[0]) {
+                            setVideos(prevVideos => {
+                                // Check if video already exists
+                                let videoExists = prevVideos.find(video => video.socketId === socketListId);
+                                
+                                if(videoExists){
+                                    console.log('Updating existing video for:', socketListId);
+                                    const updatedVideos = prevVideos.map(video => 
+                                        video.socketId === socketListId ? {...video, stream: event.streams[0]} : video
+                                    );
+                                    videoRef.current = updatedVideos;
+                                    return updatedVideos;
+                                }
+                                else{
+                                    console.log('Adding new video for:', socketListId);
+                                    const newVideo = {
+                                        socketId: socketListId,
+                                        stream: event.streams[0],
+                                        username: `User ${socketListId}`,
+                                        autoPlay: true,
+                                        playsinline: true
+                                    };
+                                    const updatedVideos = [...prevVideos, newVideo];
+                                    videoRef.current = updatedVideos;
+                                    return updatedVideos;
+                                }
+                            });
+                        }
                     }
 
-                    // Add local stream to this connection
-                    if(window.localStream && window.localStream.getTracks().length > 0){
-                        console.log('Adding local stream to connection:', socketListId);
-                        connections[socketListId].addStream(window.localStream);
-                    }
-                    else{
-                        console.log('No local stream available, adding black silence');
-                        let blackSilence = (...args)=> new MediaStream([blackScreen(...args), silence(...args)]) 
-                        window.localStream = blackSilence();
-                        connections[socketListId].addStream(window.localStream);
-                    }
+                    // FIXED: Ensure local stream is ready before adding
+                    const addLocalStreamToConnection = () => {
+                        if(window.localStream && window.localStream.getTracks().length > 0){
+                            console.log('Adding local stream to connection:', socketListId);
+                            // Add each track individually (modern approach)
+                            window.localStream.getTracks().forEach(track => {
+                                connections[socketListId].addTrack(track, window.localStream);
+                            });
+                        }
+                        else{
+                            console.log('No local stream available, adding black silence');
+                            let blackSilence = (...args)=> new MediaStream([blackScreen(...args), silence(...args)]) 
+                            window.localStream = blackSilence();
+                            window.localStream.getTracks().forEach(track => {
+                                connections[socketListId].addTrack(track, window.localStream);
+                            });
+                        }
+                    };
+
+                    addLocalStreamToConnection();
                 })
 
-                // If this user just joined, initiate offers to all existing users
-                if(id === socketIdRef.current){
-                    console.log('I just joined, creating offers for existing users');
-                    for(let id2 in connections){
-                        if(id2 === socketIdRef.current){
-                            continue;
+                // FIXED: Add delay to ensure connections are properly set up
+                setTimeout(() => {
+                    // If this user just joined, initiate offers to all existing users
+                    if(id === socketIdRef.current){
+                        console.log('I just joined, creating offers for existing users');
+                        for(let id2 in connections){
+                            if(id2 === socketIdRef.current){
+                                continue;
+                            }
+                            console.log('Creating offer for:', id2);
+                            connections[id2].createOffer()
+                            .then((description)=>{
+                                return connections[id2].setLocalDescription(description);
+                            })
+                            .then(()=>{
+                                console.log('Sending offer to:', id2);
+                                socketRef.current.emit('signal', id2, JSON.stringify({"sdp": connections[id2].localDescription}))
+                            })
+                            .catch(e=>{
+                                console.log(`Error creating offer for ${id2}:`, e)
+                            })
                         }
-                        console.log('Creating offer for:', id2);
-                        connections[id2].createOffer()
-                        .then((description)=>{
-                            return connections[id2].setLocalDescription(description);
-                        })
-                        .then(()=>{
-                            console.log('Sending offer to:', id2);
-                            socketRef.current.emit('signal', id2, JSON.stringify({"sdp": connections[id2].localDescription}))
-                        })
-                        .catch(e=>{
-                            console.log(`Error creating offer for ${id2}:`, e)
-                        })
                     }
-                }
-
+                }, 1000); // 1 second delay to ensure stream is ready
             })
-
         })
     }
 
@@ -207,20 +205,25 @@ function VideoCall() {
             if(localVideoRef.current){
                 localVideoRef.current.srcObject = stream;
             }           
-            // update the state variables
             setVideoPermissionsAvailable(true)
             setAudioPermissionsAvailable(true)
             window.localStream = stream;
+            console.log('Media permissions granted, stream ready:', stream);
+            return stream;
         }
         catch(err){
             console.log('Media permissions error:', err);
             setVideoPermissionsAvailable(false);
             setAudioPermissionsAvailable(false);
+            // Create fallback stream
+            let blackSilence = (...args)=> new MediaStream([blackScreen(...args), silence(...args)]) 
+            window.localStream = blackSilence();
+            if(localVideoRef.current) {
+                localVideoRef.current.srcObject = window.localStream;
+            }
             throw err;
         }
     }
-
-    // We are using the below useEffect to handle the changing of states of askForUsername state variable
 
     useEffect(()=>{
         if(!askForUsername && window.localStream && localVideoRef.current){
@@ -232,32 +235,41 @@ function VideoCall() {
         getMediaPermissions();
     }, [])
 
-    // Here we are using the conditional useEffect because we want these things to execute only when there are any changes in the audio or video
-
     const getUserMediaSuccess = (stream)=>{
         try{
-            // first we are getting all the tracks that are currently there and we are stopping them for now
-            window.localStream.getTracks().forEach((track)=>{
-                track.stop()
-            })            
+            if (window.localStream) {
+                window.localStream.getTracks().forEach((track)=>{
+                    track.stop()
+                })
+            }            
         }   
         catch(err){
-            console.log(`This error occured : ${err}`)
+            console.log(`Track cleanup error: ${err}`)
         }   
-        window.localStream = stream; // re-initialize with the new stream
-        localVideoRef.current.srcObject = stream; // this is used to update any changes made to the media like turning on/off the audio/video that will be rendered on the UI
+        
+        window.localStream = stream;
+        localVideoRef.current.srcObject = stream;
 
-        // now we are iterating through the connections and ignoring if the ID is the same as the curent socket ID and if not, then we are adding the updated stream to all other sockets
-
+        // Update all existing connections with new stream
         for (let id in connections){
             if(id === socketIdRef.current){
                 continue;
             }
             
-            connections[id].addStream(window.localStream); // here we are adding teh updated stream for all the sockets except for our own
+            // Remove old tracks and add new ones
+            const senders = connections[id].getSenders();
+            senders.forEach(sender => {
+                if (sender.track) {
+                    connections[id].removeTrack(sender);
+                }
+            });
 
-            // Now we create another offer
+            // Add new tracks
+            stream.getTracks().forEach(track => {
+                connections[id].addTrack(track, stream);
+            });
 
+            // Create new offer
             connections[id].createOffer()
             .then((description)=>{
                 connections[id].setLocalDescription(description)
@@ -265,11 +277,11 @@ function VideoCall() {
                     socketRef.current.emit('signal', id ,JSON.stringify({'sdp': connections[id].localDescription}))
                 })
                 .catch(err =>{
-                    console.log(`This error occured : ${err}`)
+                    console.log(`Set local description error: ${err}`)
                 })
             })
             .catch(err =>{
-                console.log(`This error occured : ${err}`)
+                console.log(`Create offer error: ${err}`)
             })
         }
 
@@ -285,15 +297,25 @@ function VideoCall() {
                     })
                 }
                 catch(err){
-                    console.log(`This error occured : ${err}`)
+                    console.log(`Track cleanup error: ${err}`)
                 }
 
                 let blackSilence = (...args)=> new MediaStream([blackScreen(...args), silence(...args)]) 
                 window.localStream = blackSilence();
-                localVideoRef.current.srcObject = window.localStream;  // add the black silence to the stream of the user who has started it i.e. the current socket previously in the function to connect to the socket server, we were adding the black silence for all the other sockets that are a part of the meeting
+                localVideoRef.current.srcObject = window.localStream;
 
                 for(let id in connections){
-                    connections[id].addStream(window.localStream)
+                    const senders = connections[id].getSenders();
+                    senders.forEach(sender => {
+                        if (sender.track) {
+                            connections[id].removeTrack(sender);
+                        }
+                    });
+
+                    window.localStream.getTracks().forEach(track => {
+                        connections[id].addTrack(track, window.localStream);
+                    });
+
                     connections[id].createOffer()
                     .then((description)=>{
                         connections[id].setLocalDescription(description)
@@ -301,30 +323,25 @@ function VideoCall() {
                             socketRef.current.emit('signal', id, JSON.stringify({'sdp': connections[id].localDescription}))
                         })
                         .catch(err =>{
-                            console.log(`This error occured : ${err}`)
+                            console.log(`Set local description error: ${err}`)
                         })
                     })
                     .catch(err =>{
-                        console.log(`This error occured : ${err}`)
+                        console.log(`Create offer error: ${err}`)
                     })
                 }
-
             }
         })
-
     }
 
     let silence = ()=>{
         let context = new AudioContext()
-        let oscillator = context.createOscillator() // this creates an oscillatorNode which is a source representing a periodic waveform and basically generates a constant tone (Here this constant tone will be nothing but silence)
-
+        let oscillator = context.createOscillator()
         let destination = oscillator.connect(context.createMediaStreamDestination());
-        oscillator.start(); // This starts producing the 'constant tone of silence'
-        context.resume(); // now we can resume the audio context after adding the silence 
+        oscillator.start();
+        context.resume();
         return Object.assign(destination.stream.getAudioTracks()[0], {enabled: false})
     }
-
-    // now we are creating the function for the black screen
 
     let blackScreen = ({width = 640, height = 480} = {})=>{
         let canvas = Object.assign(document.createElement('canvas'), {width, height})
@@ -333,22 +350,23 @@ function VideoCall() {
         return Object.assign(stream.getVideoTracks()[0], {enabled: false})
     }
 
-
     const getUserMedia = ()=>{
         if((video && videoPermissionsAvailable) || (audio && audioPermissionsAvailable)){
-            navigator.mediaDevices.getUserMedia({video: video, audio: audio}) // here we are setting the status of audio and video based on the current status of them in case any changes happen
-            .then(getUserMediaSuccess) // add the function for getUserMedia success
+            navigator.mediaDevices.getUserMedia({video: video, audio: audio})
+            .then(getUserMediaSuccess)
             .catch(err=>{
-                console.log(`This error occured : ${err}`)
+                console.log(`Get user media error: ${err}`)
             })
         }
         else{
             try{
-                let tracks = localVideoRef.current.srcObject.getTracks();
-                tracks.forEach(track=>track.stop())
+                if (localVideoRef.current && localVideoRef.current.srcObject) {
+                    let tracks = localVideoRef.current.srcObject.getTracks();
+                    tracks.forEach(track=>track.stop())
+                }
             }
             catch(err){
-                console.log(`This error occured : ${err}`)
+                console.log(`Track cleanup error: ${err}`)
             }
         }
     }
@@ -359,72 +377,121 @@ function VideoCall() {
         }
     }, [audio, video])
 
-    // Monitor videos state changes
     useEffect(() => {
         console.log('Videos state updated:', videos);
     }, [videos]);
 
-    let getMedia = ()=>{
-        setVideo(videoPermissionsAvailable)
-        setAudio(audioPermissionsAvailable)
-        connectToSocketServer();
+    let getMedia = async ()=>{
+        // FIXED: Ensure stream is ready before connecting
+        try {
+            if (!window.localStream || window.localStream.getTracks().length === 0) {
+                console.log('Waiting for media stream...');
+                await getMediaPermissions();
+            }
+            setVideo(videoPermissionsAvailable)
+            setAudio(audioPermissionsAvailable)
+            connectToSocketServer();
+        } catch (error) {
+            console.error('Error getting media:', error);
+            // Connect anyway with fallback stream
+            connectToSocketServer();
+        }
     }
 
-    let connect = ()=>{
+    let connect = async ()=>{
         if(username.trim() === "") {
             alert("Please enter a username");
             return;
         }
         setAskForUsername(false); 
-        getMedia(); // after the username is entered, we will disable the asking for username again and will proceed to connect to the socket server and update the audio and video
+        await getMedia();
     }
 
     return ( 
-        <>
+        <div className="videoCallContainer">
             <div className="contentContainer">
-                {
-                    askForUsername === true ? 
-                    <div>
-                        <h2 style={{color: "white"}}>Enter into the lobby</h2>
-                        <h3>Enter your username</h3>
-                        <input type="text" value={username} className="username" onChange={(e)=>{setUsername(e.target.value)}} />
-                        <button onClick={connect}>Connect</button>
-                        <div>
-                            <video ref={localVideoRef} autoPlay muted></video>
+            {
+                askForUsername === true ? 
+                <div className="username-section">
+                    <h2>Enter into the lobby</h2>
+                    <h3>Enter your username</h3>
+                    <input 
+                        type="text" 
+                        value={username} 
+                        className="username" 
+                        onChange={(e)=>{setUsername(e.target.value)}} 
+                        placeholder="Enter your username..."
+                    />
+                    <button onClick={connect}>Connect</button>
+                    <video ref={localVideoRef} autoPlay muted playsInline></video>
+                </div> : 
+                <div className="video-call-container">
+                    <div className="room-info">
+                        <h2>Room: {window.location.pathname.substring(1) || 'default'}</h2>
+                        <h2>Connected as: {username}</h2>
+                    </div>
+
+                    <div className="buttonContainer">
+                        <button className="video-button">
+                            {(video === true) ? <i className="fa-solid fa-video-slash"></i> : <i class="fa-solid fa-video"></i>}
+                        </button>
+                        <button className="audio-button">
+                            {(audio == true ? <i className="fa-solid fa-microphone-slash"></i> : <i class="fa-solid fa-microphone"></i>)}
+                        </button>
+                        <button className="end-call-button">
+                            <span class="material-symbols-outlined">
+                            call_end
+                            </span>
+                        </button>
+                        {
+                            (screenShareAvailable === true ? 
+                                <button>
+                                    {screenShare === true ? 
+                                    <span className="material-symbols-outlined">stop_screen_share</span>:
+                                    <span className="material-symbols-outlined">
+                                    present_to_all
+                                    </span>
+                                    }
+                                </button> : <></>
+                            )
+                        }
+                    </div>
+                    
+                    <div className="videos-grid">
+                        {/* The current user's local video */}
+                        <div className="current-user-video-container">
+                            <h2>You ({username})</h2>
+                            <video className="current-user-video" ref={localVideoRef} autoPlay muted playsInline></video>
                         </div>
                         
-                    </div> : 
-                    <>
-                        {
-                        // Here if we would have left this part empty, then we will get an error saying that localVideoRef.current is undefined because once we add some username and click on connect, the askForUsername is being set to false and hence after that we will see the code that is written here but since there is nothing implemented here, we will get an error saying that the current object is undefined
-                        }
-                        <div>
-                            <h2 style={{color: 'white'}}>You: {username}</h2>
-                            <video ref={localVideoRef} autoPlay muted playsInline></video>
-                        </div>
+                        {/* Other users' videos */}
                         {
                             videos.map((video)=>{
                                 return(
-                                    <div key={video.socketId}>
-                                        <h2 style={{color: 'white'}}>User ID: {video.socketId}</h2>
+                                    <div key={video.socketId} className="conference-view other-user-video-container">
+                                        <h2>User: {video.socketId.substring(0, 8)}...</h2>
                                         <video 
+                                        className="other-users-video"
+                                            data-socket={video.socketId}
                                             ref={(ref)=>{
                                                 if(ref && video.stream){
-                                                    ref.srcObject = video.stream // this adds the video stream to the div and we will be seeing the other users feed in this div
+                                                    console.log('Setting video stream for:', video.socketId);
+                                                    ref.srcObject = video.stream
                                                 }
                                             }}
                                             autoPlay 
-                                            muted 
+                                            muted
                                             playsInline
                                         ></video>
                                     </div>
                                 )
                             })
                         }
-                    </>
-                }
+                    </div>
+                </div>
+            }
             </div>
-        </>
+        </div>
     );
 }
 
