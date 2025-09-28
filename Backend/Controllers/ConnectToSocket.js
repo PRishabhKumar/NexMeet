@@ -63,6 +63,30 @@ const ConnectToSocket = (server) => {
             }
         })
 
+        // event when the user toggles their video
+
+        socket.on('video-toggle', (data) => {
+            console.log(`User ${data.socketId} toggled video: ${data.videoEnabled}`);
+            
+            // Broadcast to all other users in the same room (except sender)
+            socket.to(roomId).emit('user-video-toggle', {
+                socketId: data.socketId,
+                videoEnabled: data.videoEnabled
+            });
+        });
+
+        // event when the user toggles their audio
+
+        socket.on('audio-toggle', (data) => {
+            console.log(`User ${data.socketId} toggled audio: ${data.audioEnabled}`);
+            
+            // Broadcast to all other users in the same room (except sender)
+            socket.to(roomId).emit('user-audio-toggle', {
+                socketId: data.socketId,
+                audioEnabled: data.audioEnabled
+            });
+        });
+
         socket.on("disconnect", () => {
             let userDuration = Math.abs(onlineTime[socket.id] - new Date()); // this calcualtes the time elapsed since the the user joined the meeting and the current date and time i.e. when he is leaving
 

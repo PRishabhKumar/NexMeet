@@ -23,11 +23,11 @@ function VideoCall() {
     // State variables
     let [videoPermissionsAvailable, setVideoPermissionsAvailable] = useState(true);
     let [audioPermissionsAvailable, setAudioPermissionsAvailable] = useState(true);
-    let [video, setVideo] = useState();
-    let [audio, setAudio] = useState();
-    let [screenShare, setScreenShare] = useState();
+    let [video, setVideo] = useState(false);
+    let [audio, setAudio] = useState(false);
+    let [screenShare, setScreenShare] = useState(false);
     let [showModal, setShowModal] = useState();
-    let [screenShareAvailable, setScreenShareAvailable] = useState();
+    let [screenShareAvailable, setScreenShareAvailable] = useState(true);
     let [messages, setMessages] = useState();
     let [message, setMessage] = useState("");
     let [newMessages, setNewMessages] = useState(0); 
@@ -139,7 +139,9 @@ function VideoCall() {
                                         stream: event.streams[0],
                                         username: `User ${socketListId}`,
                                         autoPlay: true,
-                                        playsinline: true
+                                        playsinline: true,
+                                        videoEnabled: true,
+                                        audioEnabled: true
                                     };
                                     const updatedVideos = [...prevVideos, newVideo];
                                     videoRef.current = updatedVideos;
@@ -197,6 +199,26 @@ function VideoCall() {
                 }, 1000); // 1 second delay to ensure stream is ready
             })
         })
+        // Handling user's toggling of audio and video
+
+    
+        const setVideoWithBroadcast = (newVideoState) => {
+            setVideo(newVideoState);
+            socketRef.current.emit('video-toggle', {
+                socketId: socketIdRef.current,
+                videoEnabled: newVideoState
+            });
+        };
+        
+        socketRef.current.on('user-video-toggle', (data) => {
+            setVideos(prevVideos => 
+                prevVideos.map(video => 
+                    video.socketId === data.socketId 
+                        ? {...video, videoEnabled: data.videoEnabled}
+                        : video
+                )
+            );
+        });
     }
 
     const getMediaPermissions = async ()=>{
@@ -407,6 +429,102 @@ function VideoCall() {
         await getMedia();
     }
 
+    // Logic for screen sharing 
+
+    let getDisplayMediaSuccess = (stream)=>{
+        try{
+            window.localStream.getTracks().forEach((track)=>{
+                track.stop()
+            })
+        }
+        catch(err){
+            console.log(`This error occured : ${err}`)
+        }
+        window.localStream = stream
+        localVideoRef.current.srcObject = stream
+
+        for(let id in connections){
+            if(id !== socketIdRef.current){
+                connections[id].addStream(window.localStream)
+                connections[id].createOffer()
+                .then((description)=>{
+                    connections[id].setLocalDescription(description)
+                    .then(()=>{
+                        socketRef.current.emit('signal', id, JSON.stringify({'sdp': connections[id].localDescription}))
+                    })
+                    .catch((err)=>{
+                        console.log(`This error occured : ${err}`)
+                    })
+                })
+            }
+        }
+
+        stream.getTracks().forEach((track)=>{
+            track.onended = ()=>{
+                setScreenShare(false)
+
+                try{
+                    let tracks = localVideoRef.current.srcObject.getTracks()
+                    tracks.forEach((track)=>{
+                        track.stop()
+                    })
+                }
+                catch(err){
+                    console.log(`Track cleanup error: ${err}`)
+                }
+
+                let blackSilence = (...args)=> new MediaStream([blackScreen(...args), silence(...args)]) 
+                window.localStream = blackSilence();
+                localVideoRef.current.srcObject = window.localStream;
+                getUserMedia()               
+            }
+        })
+
+    }
+
+    let getDisplayMedia = ()=>{
+        if(screenShare){
+            if(navigator.mediaDevices.getDisplayMedia){
+                navigator.mediaDevices.getDisplayMedia({video: true, audio: true})
+                .then(getDisplayMediaSuccess)
+                .then((stream)=>{})
+                .catch((err)=>{
+                    console.log(`This error occured : ${err}`)
+                })
+            }            
+        }
+        else{
+            console.log(`Screen sharing was stopped by the user`)
+
+            if(window.localStream){
+                window.localStream.getTracks().forEach((track)=>{
+                    track.stop()
+                })
+            } 
+            
+            let blackSilence = (...args)=> new MediaStream([blackScreen(...args), silence(...args)]) 
+            window.localStream = blackSilence();
+            localVideoRef.current.srcObject = window.localStream;
+
+            setTimeout(()=>{
+                getUserMedia()
+            }, 100)
+
+        }
+    }
+
+    useEffect(()=>{
+        if(screenShare !== undefined){
+            getDisplayMedia();
+        }
+    }, [screenShare])
+
+    let handleScreenShare = ()=>{
+        setScreenShare(!screenShare)
+    }
+
+    
+
     return ( 
         <div className="videoCallContainer">
             <div className="contentContainer">
@@ -432,11 +550,15 @@ function VideoCall() {
                     </div>
 
                     <div className="buttonContainer">
-                        <button className="video-button">
-                            {(video === true) ? <i className="fa-solid fa-video-slash"></i> : <i class="fa-solid fa-video"></i>}
+                        <button className="video-button" onClick={()=>{
+                            setVideo(!video)
+                        }} style={{backgroundColor: video === false ? "red" : "#5f6368"}}>
+                            {(video === true) ? <i class="fa-solid fa-video"></i> : <i className="fa-solid fa-video-slash"></i>}
                         </button>
-                        <button className="audio-button">
-                            {(audio == true ? <i className="fa-solid fa-microphone-slash"></i> : <i class="fa-solid fa-microphone"></i>)}
+                        <button className="audio-button" onClick={()=>{
+                            setAudio(!audio)
+                        }} style={{backgroundColor: audio === false ? "red" : "#5f6368"}}>
+                            {(audio == true ? <i class="fa-solid fa-microphone"></i> : <i className="fa-solid fa-microphone-slash"></i>)}
                         </button>
                         <button className="end-call-button">
                             <span class="material-symbols-outlined">
@@ -445,7 +567,9 @@ function VideoCall() {
                         </button>
                         {
                             (screenShareAvailable === true ? 
-                                <button>
+                                <button onClick={()=>{
+                                    handleScreenShare()
+                                }}>
                                     {screenShare === true ? 
                                     <span className="material-symbols-outlined">stop_screen_share</span>:
                                     <span className="material-symbols-outlined">
@@ -455,34 +579,90 @@ function VideoCall() {
                                 </button> : <></>
                             )
                         }
+                        <div className="chatButton">                            
+                            <button>
+                                <span class="material-symbols-outlined">chat</span>
+                            </button>
+                            {
+                                newMessages !== 0 && 
+                                <div className="badge">{newMessages}</div>
+                            }
+                        </div>
                     </div>
                     
                     <div className="videos-grid">
                         {/* The current user's local video */}
                         <div className="current-user-video-container">
-                            <h2>You ({username})</h2>
-                            <video className="current-user-video" ref={localVideoRef} autoPlay muted playsInline></video>
+                            
+                        <div className="user-information">
+                            <h2>
+                                You ({username})                                
+                            </h2>
+                        </div>
+                            
+                            {
+                                video === false ? 
+                                <div className="videoOffScreen">
+                                    <i class="fa-solid fa-video-slash"></i> 
+                                </div> : 
+                                <video className="current-user-video" ref={localVideoRef} autoPlay muted playsInline></video>
+                            }
+
+                            {
+                                // Handle the logic for showing the audio off badge 
+                                audio === false &&
+                                <div className="badgeContainer">
+                                    <div className="audioOffBadge">
+                                        <span class="material-symbols-outlined">
+                                            mic_off
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                            
                         </div>
                         
                         {/* Other users' videos */}
                         {
-                            videos.map((video)=>{
+                            videos.map((video)=>{ 
                                 return(
                                     <div key={video.socketId} className="conference-view other-user-video-container">
-                                        <h2>User: {video.socketId.substring(0, 8)}...</h2>
-                                        <video 
-                                        className="other-users-video"
-                                            data-socket={video.socketId}
-                                            ref={(ref)=>{
-                                                if(ref && video.stream){
-                                                    console.log('Setting video stream for:', video.socketId);
-                                                    ref.srcObject = video.stream
-                                                }
-                                            }}
-                                            autoPlay 
-                                            muted
-                                            playsInline
-                                        ></video>
+                                        <div className="user-information">
+                                            <h2>
+                                                User: {video.socketId.substring(0, 8)}...
+                                            </h2>
+                                        </div>                                        
+                                        
+                                        {
+                                            video.videoEnabled === false ?  // Check remote user's video state
+                                            <div className="videoOffScreen">
+                                                <i class="fa-solid fa-video-slash"></i> 
+                                            </div> : 
+                                            <video 
+                                                className="other-users-video"
+                                                data-socket={video.socketId}
+                                                ref={(ref)=>{
+                                                    if(ref && video.stream){
+                                                        console.log('Setting video stream for:', video.socketId);
+                                                        ref.srcObject = video.stream
+                                                    }
+                                                }}
+                                                autoPlay 
+                                                muted
+                                                playsInline
+                                            ></video>
+                                        }
+                                        {
+                                            // Audio badge for other users
+                                            video.audioEnabled === false &&
+                                            <div className="badgeContainer">
+                                                <div className="audioOffBadge">
+                                                    <span class="material-symbols-outlined">
+                                                        mic_off
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
                                 )
                             })

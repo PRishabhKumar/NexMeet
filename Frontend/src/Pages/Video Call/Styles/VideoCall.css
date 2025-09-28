@@ -152,11 +152,12 @@ body {
   gap: 16px;
   background: rgba(32, 33, 36, 0.95);
   backdrop-filter: blur(16px);
-  padding: 16px 24px;
+  padding: 1rem 2rem;
   border-radius: 50px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 100;
+  margin-top: 1.5rem;
 }
 
 .buttonContainer button {
@@ -198,22 +199,22 @@ body {
 
 /* Video Button */
 .video-button {
-  background: #5f6368 !important;
-  color: #e8eaed !important;
+  background: #5f6368;
+  color: #e8eaed;
 }
 
 .video-button:hover {
-  background: #6c757d !important;
+  background: #6c757d;
 }
 
 /* Audio Button */
 .audio-button {
-  background: #5f6368 !important;
-  color: #e8eaed !important;
+  background: #5f6368 ;
+  color: #e8eaed ;
 }
 
 .audio-button:hover {
-  background: #6c757d !important;
+  background: #6c757d;
 }
 
 /* End Call Button */
@@ -237,7 +238,25 @@ body {
   background: #2d8a47;
 }
 
+.chatButton{
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+
 /* ================== VIDEO GRID ================== */
+
+/* Styling for the screen to be displayed when video is turned off and the icon to be shown when the audio is off*/
+
+.videoOffScreen{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10rem;
+}
+
 .videos-grid {
   flex: 1;
   display: grid;
@@ -253,7 +272,7 @@ body {
 
 /* Auto-sizing based on participant count */
 .videos-grid[data-count="1"] { 
-  grid-template-columns: 1fr;
+  grid-template-columns: 0.5fr;
   place-items: center;
 }
 .videos-grid[data-count="2"] { grid-template-columns: repeat(2, 1fr); }
@@ -308,11 +327,17 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
-.current-user-video-container h2,
-.other-user-video-container h2 {
+/* Fixed positioning for badge inside h2 */
+.user-information {  
   position: absolute;
   bottom: 12px;
   left: 16px;
+  width: fit-content;
+  z-index: 2;
+}
+
+.current-user-video-container h2,
+.other-user-video-container h2 {  
   color: white;
   margin: 0;
   font-size: 14px;
@@ -320,14 +345,35 @@ body {
   background: rgba(0, 0, 0, 0.7);
   padding: 8px 12px;
   border-radius: 20px;
-  z-index: 2;
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative; 
+  overflow: visible; 
+  white-space: nowrap;
 }
 
 .current-user-video-container h2 {
   background: rgba(25, 118, 210, 0.8);
   border: 1px solid rgba(25, 118, 210, 0.3);
+}
+
+.badgeContainer{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.audioOffBadge{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  background-color: white;
+  border-radius: 50%;
+  padding: 0.5rem;
 }
 
 .current-user-video,
