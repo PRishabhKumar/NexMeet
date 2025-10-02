@@ -199,16 +199,7 @@ function VideoCall() {
                 }, 1000); // 1 second delay to ensure stream is ready
             })
         })
-        // Handling user's toggling of audio and video
-
-    
-        const setVideoWithBroadcast = (newVideoState) => {
-            setVideo(newVideoState);
-            socketRef.current.emit('video-toggle', {
-                socketId: socketIdRef.current,
-                videoEnabled: newVideoState
-            });
-        };
+        // Handling user's toggling of audio and video       
         
         socketRef.current.on('user-video-toggle', (data) => {
             setVideos(prevVideos => 
@@ -219,6 +210,20 @@ function VideoCall() {
                 )
             );
         });
+
+        // Listener for audio toggles 
+
+        socketRef.current.on('user-audio-toggle', (data) => {
+        console.log('Received audio toggle from:', data.socketId, 'enabled:', data.audioEnabled);
+        setVideos(prevVideos => 
+            prevVideos.map(video => 
+                video.socketId === data.socketId 
+                    ? {...video, audioEnabled: data.audioEnabled}
+                    : video
+                )
+            );
+        });
+
     }
 
     const getMediaPermissions = async ()=>{
@@ -445,7 +450,9 @@ function VideoCall() {
 
         for(let id in connections){
             if(id !== socketIdRef.current){
-                connections[id].addStream(window.localStream)
+                window.localStream.getTracks().forEach(track=>{
+                    connections[id].addTrack(track, window.localStream)
+                })
                 connections[id].createOffer()
                 .then((description)=>{
                     connections[id].setLocalDescription(description)
@@ -523,6 +530,20 @@ function VideoCall() {
         setScreenShare(!screenShare)
     }
 
+    // useEffect for handling 'enter' key presses to enter the call
+
+    useEffect(()=>{
+        const handleEnterKeyPress = (e)=>{
+            if(e.key == 'Enter'){
+                connect()
+            }
+        }
+        document.addEventListener('keydown', handleEnterKeyPress)
+        return ()=>{
+            document.removeEventListener('keydown', handleEnterKeyPress)
+        }
+    }, [askForUsername, username])
+
     
 
     return ( 
@@ -540,7 +561,7 @@ function VideoCall() {
                         onChange={(e)=>{setUsername(e.target.value)}} 
                         placeholder="Enter your username..."
                     />
-                    <button onClick={connect}>Connect</button>
+                    <button onClick={connect}>Connect</button>                    
                     <video ref={localVideoRef} autoPlay muted playsInline></video>
                 </div> : 
                 <div className="video-call-container">
@@ -551,12 +572,22 @@ function VideoCall() {
 
                     <div className="buttonContainer">
                         <button className="video-button" onClick={()=>{
-                            setVideo(!video)
+                            const newState = !video
+                            setVideo(newState)
+                            socketRef.current.emit('video-toggle', {
+                                socketId: socketIdRef.current,
+                                videoEnabled: newState
+                            })
                         }} style={{backgroundColor: video === false ? "red" : "#5f6368"}}>
                             {(video === true) ? <i class="fa-solid fa-video"></i> : <i className="fa-solid fa-video-slash"></i>}
                         </button>
                         <button className="audio-button" onClick={()=>{
-                            setAudio(!audio)
+                            const newState = !audio
+                            setAudio(newState)
+                            socketRef.current.emit('audio-toggle', {
+                                socketId: socketIdRef.current,
+                                audioEnabled: newState
+                            })
                         }} style={{backgroundColor: audio === false ? "red" : "#5f6368"}}>
                             {(audio == true ? <i class="fa-solid fa-microphone"></i> : <i className="fa-solid fa-microphone-slash"></i>)}
                         </button>
@@ -624,27 +655,27 @@ function VideoCall() {
                         
                         {/* Other users' videos */}
                         {
-                            videos.map((video)=>{ 
+                            videos.map((videoObject)=>{ 
                                 return(
-                                    <div key={video.socketId} className="conference-view other-user-video-container">
+                                    <div key={videoObject.socketId} className="conference-view other-user-video-container">
                                         <div className="user-information">
                                             <h2>
-                                                User: {video.socketId.substring(0, 8)}...
+                                                User: {videoObject.socketId.substring(0, 8)}...
                                             </h2>
                                         </div>                                        
                                         
                                         {
-                                            video.videoEnabled === false ?  // Check remote user's video state
+                                            videoObject.videoEnabled === false ?  // Check remote user's video state
                                             <div className="videoOffScreen">
                                                 <i class="fa-solid fa-video-slash"></i> 
                                             </div> : 
                                             <video 
                                                 className="other-users-video"
-                                                data-socket={video.socketId}
+                                                data-socket={videoObject.socketId}
                                                 ref={(ref)=>{
-                                                    if(ref && video.stream){
-                                                        console.log('Setting video stream for:', video.socketId);
-                                                        ref.srcObject = video.stream
+                                                    if(ref && videoObject.stream){
+                                                        console.log('Setting video stream for:', videoObject.socketId);
+                                                        ref.srcObject = videoObject.stream
                                                     }
                                                 }}
                                                 autoPlay 
@@ -654,7 +685,7 @@ function VideoCall() {
                                         }
                                         {
                                             // Audio badge for other users
-                                            video.audioEnabled === false &&
+                                            videoObject.audioEnabled === false &&
                                             <div className="badgeContainer">
                                                 <div className="audioOffBadge">
                                                     <span class="material-symbols-outlined">

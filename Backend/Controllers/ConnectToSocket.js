@@ -68,11 +68,26 @@ const ConnectToSocket = (server) => {
         socket.on('video-toggle', (data) => {
             console.log(`User ${data.socketId} toggled video: ${data.videoEnabled}`);
             
-            // Broadcast to all other users in the same room (except sender)
-            socket.to(roomId).emit('user-video-toggle', {
-                socketId: data.socketId,
-                videoEnabled: data.videoEnabled
-            });
+            // Finding the room the user in
+
+            const [matchingRoom, found] = Object.entries(connections)
+            .reduce(([room, isFound], [roomKey, roomValue])=>{
+                if(!isFound && roomValue.includes(socket.id)){
+                    return [roomKey, true]
+                }
+                return [roomKey, isFound]
+            }, ['', false])
+            if(found){
+                // Broadcast this change to all users in this room
+                connections[matchingRoom].forEach((connection)=>{
+                    if(connection !== socket.id){
+                        ioServer.to(connection).emit('user-video-toggle', {
+                            socketId: data.socketId,
+                            videoEnabled: data.videoEnabled
+                        })
+                    }
+                })
+            }
         });
 
         // event when the user toggles their audio
@@ -80,11 +95,23 @@ const ConnectToSocket = (server) => {
         socket.on('audio-toggle', (data) => {
             console.log(`User ${data.socketId} toggled audio: ${data.audioEnabled}`);
             
-            // Broadcast to all other users in the same room (except sender)
-            socket.to(roomId).emit('user-audio-toggle', {
-                socketId: data.socketId,
-                audioEnabled: data.audioEnabled
-            });
+            const [matchingRoom, found] = Object.entries(connections)
+            .reduce(([room, isFound], [roomKey, roomValue])=>{
+                if(!isFound && roomValue.includes(socket.id)){
+                    return [roomKey, true]
+                }
+                return [room, isFound]
+            }, ['', false])
+            if(found == true){
+                connections[matchingRoom].forEach((connection)=>{
+                    if(connection !== socket.id){
+                        ioServer.to(connection).emit('user-audio-toggle', {
+                            socketId: data.socketId,
+                            audioEnabled: data.audioEnabled
+                        })
+                    }
+                })
+            }
         });
 
         socket.on("disconnect", () => {
