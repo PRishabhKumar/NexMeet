@@ -272,8 +272,9 @@ body {
 
 /* Auto-sizing based on participant count */
 .videos-grid[data-count="1"] { 
-  grid-template-columns: 0.5fr;
-  place-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .videos-grid[data-count="2"] { grid-template-columns: repeat(2, 1fr); }
 .videos-grid[data-count="3"] { grid-template-columns: repeat(2, 1fr); }
@@ -282,15 +283,15 @@ body {
 /* Single user video styling */
 .videos-grid[data-count="1"] .current-user-video-container,
 .videos-grid[data-count="1"] .other-user-video-container {
-  max-width: 600px;
-  width: 100%;
+  width: 900px;
+  max-width: 1000px;
+  flex-shrink: 0;
 }
 
 .videos-grid[data-count="1"] .current-user-video,
 .videos-grid[data-count="1"] .other-users-video {
-  aspect-ratio: 4/3;
-  min-height: 400px;
-  max-height: 500px;
+  aspect-ratio: 16/9;
+  width: 100%;
   height: auto;
 }
 
@@ -386,6 +387,66 @@ body {
   aspect-ratio: 16/9;
 }
 
+/* Design for the chat box */
+
+.chatBoxContainer{
+  position: fixed;
+  top: 70px;
+  right: -30%;
+  height: calc(100vh - 200px);
+  width: 28vw;
+  min-width: 320px;
+  max-width: 500px;
+  border-radius: 1rem;
+  background-color: black;
+  z-index: 50;
+  display: flex;
+  margin-top: 3rem;
+  overflow-y: auto;
+  overflow-x: hidden;  
+  transition: right 0.3s ease-in-out;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.chatBoxOpen{
+  right: 20px;
+}
+
+.chatBoxClosed{
+  right: -30%;
+}
+
+.chatHeader{
+  text-align: center;
+  padding: 0.25rem;
+}
+
+.chattingArea{
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.chatInputBox{
+  position: absolute;
+  bottom: 0;
+  font-size: larger;  
+  padding: 2rem 1rem 1rem 1rem;
+  display: flex;
+}
+
+.sendButton{
+  background-color: black;
+}
+
+
+
 /* ================== RESPONSIVE DESIGN ================== */
 
 /* Extra Large Screens (1400px and up) */
@@ -450,22 +511,24 @@ body {
     padding-bottom: 110px;
   }
   
-  /* Single user on tablet - center it */
+  /* Single user on tablet */
   .videos-grid[data-count="1"] {
-    grid-template-columns: 1fr;
-    place-items: center;
+    display: flex;
+    justify-content: flex-start;
   }
   
   .videos-grid[data-count="1"] .current-user-video-container,
   .videos-grid[data-count="1"] .other-user-video-container {
-    max-width: 500px;
+    width: 400px;
+    max-width: 400px;
+    flex-shrink: 0;
   }
   
   .videos-grid[data-count="1"] .current-user-video,
   .videos-grid[data-count="1"] .other-users-video {
-    min-height: 375px;
-    max-height: 450px;
-    aspect-ratio: 4/3;
+    aspect-ratio: 16/9;
+    width: 100%;
+    height: auto;
   }
   
   .current-user-video-container,
@@ -496,12 +559,24 @@ body {
     padding-bottom: 100px;
   }
   
-  /* Single user on tablets */
+  /* Single user on small tablets */
+  .videos-grid[data-count="1"] {
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .videos-grid[data-count="1"] .current-user-video-container,
+  .videos-grid[data-count="1"] .other-user-video-container {
+    width: 350px;
+    max-width: 350px;
+    flex-shrink: 0;
+  }
+  
   .videos-grid[data-count="1"] .current-user-video,
   .videos-grid[data-count="1"] .other-users-video {
-    min-height: 350px;
-    max-height: 420px;
-    aspect-ratio: 4/3;
+    aspect-ratio: 16/9;
+    width: 100%;
+    height: auto;
   }
   
   .buttonContainer {
@@ -596,11 +671,23 @@ body {
   }
   
   /* Single user on mobile */
+  .videos-grid[data-count="1"] {
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .videos-grid[data-count="1"] .current-user-video-container,
+  .videos-grid[data-count="1"] .other-user-video-container {
+    width: calc(100% - 16px);
+    max-width: 320px;
+    flex-shrink: 0;
+  }
+  
   .videos-grid[data-count="1"] .current-user-video,
   .videos-grid[data-count="1"] .other-users-video {
-    min-height: 280px;
-    max-height: 350px;
-    aspect-ratio: 4/3;
+    aspect-ratio: 16/9;
+    width: 100%;
+    height: auto;
   }
   
   .buttonContainer {

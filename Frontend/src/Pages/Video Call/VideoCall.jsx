@@ -2,6 +2,7 @@ import "./Styles/VideoCall.css"
 import server from "../../environment.js"
 import {useState, useEffect, useRef} from 'react'
 import Input from "./Input.jsx"
+import MessageSendButton from "./MessageSendButton.jsx"
 import io from 'socket.io-client'
 const serverPath = server
 
@@ -35,6 +36,7 @@ function VideoCall() {
     let [username, setUsername] = useState("")
     const videoRef = useRef([])
     let [videos, setVideos] = useState([])
+    let [chatButtonClicked, setChatButtonClicked] = useState(false);
 
     // Function to handle the event of recieving a message (i.e. an offer) from the server
     let messageRecievedFromServer = (fromId, message)=>{
@@ -544,6 +546,12 @@ function VideoCall() {
         }
     }, [askForUsername, username])
 
+
+    // Logic to send messages
+
+    let sendMessage = ()=>{
+        console.log(`A message has been sent`)
+    }
     
 
     return ( 
@@ -611,7 +619,9 @@ function VideoCall() {
                             )
                         }
                         <div className="chatButton">                            
-                            <button>
+                            <button onClick={()=>{
+                                setChatButtonClicked(!chatButtonClicked)
+                            }}>
                                 <span class="material-symbols-outlined">chat</span>
                             </button>
                             {
@@ -621,7 +631,19 @@ function VideoCall() {
                         </div>
                     </div>
                     
-                    <div className="videos-grid">
+                    <div className="videos-grid" data-count={videos.length + 1}>
+                        {/* This is the chat box */}
+                        <div className={`chatBoxContainer ${chatButtonClicked == true ? 'chatBoxOpen' : 'chatBoxClosed'}`}>
+                            <h2 className="chatHeader">In-call messages</h2>   
+                            <div className="chattingArea">
+                                <div className="chatInputBox">
+                                    <Input labelText="Say something..."/>
+                                    <MessageSendButton 
+                                        onClick = {sendMessage}
+                                    />                                    
+                                </div>
+                            </div>                         
+                        </div>
                         {/* The current user's local video */}
                         <div className="current-user-video-container">
                             
