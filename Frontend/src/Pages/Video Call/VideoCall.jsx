@@ -29,7 +29,7 @@ function VideoCall() {
     let [screenShare, setScreenShare] = useState(false);
     let [showModal, setShowModal] = useState();
     let [screenShareAvailable, setScreenShareAvailable] = useState(true);
-    let [messages, setMessages] = useState();
+    let [messages, setMessages] = useState([]);
     let [message, setMessage] = useState("");
     let [newMessages, setNewMessages] = useState(0); 
     let [askForUsername, setAskForUsername] = useState(true);
@@ -74,8 +74,18 @@ function VideoCall() {
         }                
     }
 
-    let addChatMessage = ()=>{
-        // Chat implementation
+    let addChatMessage = (message, sender, socketIdSender)=>{
+        setMessages((prevMessages)=>[
+            ...prevMessages, 
+            {
+                sender: sender,
+                message: message
+            }
+            // Adding the new message to the existing messages
+        ])        
+        if(socketIdSender !== socketRef.current){
+            setNewMessages(prev=>prev+1)
+        }
     }
 
     const connectToSocketServer = ()=>{
@@ -550,7 +560,18 @@ function VideoCall() {
     // Logic to send messages
 
     let sendMessage = ()=>{
-        console.log(`A message has been sent`)
+        console.log(`A message was sent by ${username}`);
+        console.log('Message content:', message);
+        if(message.trim() === "") {
+            console.log('Empty message, not sending');
+            return;
+        }
+        socketRef.current.emit('chat-message', message, username);
+        setMessage(""); // clear the message input field after the message is sent
+    }
+
+    let handleOnChange = (e)=>{
+        setMessage(e.target.value)
     }
     
 
@@ -587,7 +608,7 @@ function VideoCall() {
                                 videoEnabled: newState
                             })
                         }} style={{backgroundColor: video === false ? "red" : "#5f6368"}}>
-                            {(video === true) ? <i class="fa-solid fa-video"></i> : <i className="fa-solid fa-video-slash"></i>}
+                            {(video === true) ? <i className="fa-solid fa-video"></i> : <i className="fa-solid fa-video-slash"></i>}
                         </button>
                         <button className="audio-button" onClick={()=>{
                             const newState = !audio
@@ -597,10 +618,10 @@ function VideoCall() {
                                 audioEnabled: newState
                             })
                         }} style={{backgroundColor: audio === false ? "red" : "#5f6368"}}>
-                            {(audio == true ? <i class="fa-solid fa-microphone"></i> : <i className="fa-solid fa-microphone-slash"></i>)}
+                            {(audio == true ? <i className="fa-solid fa-microphone"></i> : <i className="fa-solid fa-microphone-slash"></i>)}
                         </button>
                         <button className="end-call-button">
-                            <span class="material-symbols-outlined">
+                            <span className="material-symbols-outlined">
                             call_end
                             </span>
                         </button>
@@ -621,8 +642,9 @@ function VideoCall() {
                         <div className="chatButton">                            
                             <button onClick={()=>{
                                 setChatButtonClicked(!chatButtonClicked)
+                                setNewMessages(0) // because when you open the chat, all new messages are read and hence the badge should not be seen
                             }}>
-                                <span class="material-symbols-outlined">chat</span>
+                                <span className="material-symbols-outlined">chat</span>
                             </button>
                             {
                                 newMessages !== 0 && 
@@ -634,13 +656,24 @@ function VideoCall() {
                     <div className="videos-grid" data-count={videos.length + 1}>
                         {/* This is the chat box */}
                         <div className={`chatBoxContainer ${chatButtonClicked == true ? 'chatBoxOpen' : 'chatBoxClosed'}`}>
-                            <h2 className="chatHeader">In-call messages</h2>   
+                            <h2 className="chatHeader">In-call messages</h2>                            
                             <div className="chattingArea">
+                                {/* here we will have all the messages displayed */}
+                                <div className="messageDisplayArea">
+                                    {
+                                        (messages || []).map((message, index)=>{
+                                            return(
+                                                <div className = {`messageContainer ${message.sender ===  socketRef.current} ? 'yourMessage' : 'othersMessage'`} key={index}>
+                                                    <p>Username: {message.sender}</p>
+                                                    <p style={{"color": "black"}}>{message.message}</p>                                                    
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
                                 <div className="chatInputBox">
-                                    <Input labelText="Say something..."/>
-                                    <MessageSendButton 
-                                        onClick = {sendMessage}
-                                    />                                    
+                                    <Input value={message} onChange={handleOnChange} labelText="Say something..."/>
+                                    <MessageSendButton onClick={sendMessage} />                                    
                                 </div>
                             </div>                         
                         </div>
@@ -656,7 +689,7 @@ function VideoCall() {
                             {
                                 video === false ? 
                                 <div className="videoOffScreen">
-                                    <i class="fa-solid fa-video-slash"></i> 
+                                    <i className="fa-solid fa-video-slash"></i> 
                                 </div> : 
                                 <video className="current-user-video" ref={localVideoRef} autoPlay muted playsInline></video>
                             }
@@ -666,7 +699,7 @@ function VideoCall() {
                                 audio === false &&
                                 <div className="badgeContainer">
                                     <div className="audioOffBadge">
-                                        <span class="material-symbols-outlined">
+                                        <span className="material-symbols-outlined">
                                             mic_off
                                         </span>
                                     </div>
@@ -689,7 +722,7 @@ function VideoCall() {
                                         {
                                             videoObject.videoEnabled === false ?  // Check remote user's video state
                                             <div className="videoOffScreen">
-                                                <i class="fa-solid fa-video-slash"></i> 
+                                                <i className="fa-solid fa-video-slash"></i> 
                                             </div> : 
                                             <video 
                                                 className="other-users-video"
@@ -710,7 +743,7 @@ function VideoCall() {
                                             videoObject.audioEnabled === false &&
                                             <div className="badgeContainer">
                                                 <div className="audioOffBadge">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         mic_off
                                                     </span>
                                                 </div>
