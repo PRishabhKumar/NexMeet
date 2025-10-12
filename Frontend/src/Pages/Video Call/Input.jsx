@@ -1,7 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Input = ({ labelText, value, onChange }) => {
+
+const Input = ({ onEnter, labelText, value, onChange }) => { 
+
+  const handleKeyDown = (e)=>{
+    if(e.key === "Enter" && !e.shiftKey){
+      onEnter?.() // execute onEnter function if it exists 
+    }
+  }
+
   return (
     <StyledWrapper>
       <div className="wave-group">
@@ -11,6 +19,7 @@ const Input = ({ labelText, value, onChange }) => {
           className="input"
           value={value}
           onChange={onChange}
+          onKeyDown={handleKeyDown}
         />
         <span className="bar" />
         <label className="label">

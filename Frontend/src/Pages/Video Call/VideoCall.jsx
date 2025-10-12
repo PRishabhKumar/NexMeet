@@ -1,6 +1,7 @@
 import "./Styles/VideoCall.css"
 import server from "../../environment.js"
-import {useState, useEffect, useRef} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
+import {useNavigate} from 'react-router-dom'
 import Input from "./Input.jsx"
 import MessageSendButton from "./MessageSendButton.jsx"
 import io from 'socket.io-client'
@@ -16,8 +17,47 @@ const peerConfigConections = {
     ]
 }
 
-function VideoCall() {
 
+
+// Memoized video call component to avoid re-rendering of the users video everytime something is typed in the message box 
+
+const RemoteVideo = React.memo(({ videoObject }) => {
+    return (
+        <div className="conference-view other-user-video-container">
+            <div className="user-information">
+                <h2>User: {videoObject.socketId.substring(0, 8)}...</h2>
+            </div>
+            {videoObject.videoEnabled ? (
+                <video
+                    className="other-users-video"
+                    ref={(ref) => {
+                        if (ref && videoObject.stream && ref.srcObject !== videoObject.stream) {
+                            ref.srcObject = videoObject.stream;
+                        }
+                    }}
+                    autoPlay
+                    muted
+                    playsInline
+                ></video>
+            ) : (
+                <div className="videoOffScreen">
+                    <i className="fa-solid fa-video-slash"></i>
+                </div>
+            )}
+            {!videoObject.audioEnabled && (
+                <div className="badgeContainer">
+                    <div className="audioOffBadge">
+                        <span className="material-symbols-outlined">mic_off</span>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+});
+
+
+function VideoCall() {
+    let router = useNavigate()
     let socketRef = useRef();
     let socketIdRef = useRef();
     let localVideoRef = useRef();
@@ -83,7 +123,7 @@ function VideoCall() {
             }
             // Adding the new message to the existing messages
         ])        
-        if(socketIdSender !== socketRef.current){
+        if(socketIdSender !== socketIdRef.current && !chatButtonClicked){
             setNewMessages(prev=>prev+1)
         }
     }
@@ -545,6 +585,11 @@ function VideoCall() {
     // useEffect for handling 'enter' key presses to enter the call
 
     useEffect(()=>{
+        // Here we are not adding the event listener for the enter button calling teh connect() function if we are already in the call 
+        if(!askForUsername){
+            return
+        }
+
         const handleEnterKeyPress = (e)=>{
             if(e.key == 'Enter'){
                 connect()
@@ -574,6 +619,18 @@ function VideoCall() {
         setMessage(e.target.value)
     }
     
+    let handleEndCall = ()=>{
+        try{
+            let tracks = localVideoRef.current.srcObject.getTracks();
+            tracks.forEach((track)=>{
+                track.stop()
+            })
+        }
+        catch(e){
+            console.log(`This error occured : ${e}`)
+        }
+        router("/home")
+    }
 
     return ( 
         <div className="videoCallContainer">
@@ -620,7 +677,7 @@ function VideoCall() {
                         }} style={{backgroundColor: audio === false ? "red" : "#5f6368"}}>
                             {(audio == true ? <i className="fa-solid fa-microphone"></i> : <i className="fa-solid fa-microphone-slash"></i>)}
                         </button>
-                        <button className="end-call-button">
+                        <button onClick={handleEndCall} className="end-call-button">
                             <span className="material-symbols-outlined">
                             call_end
                             </span>
@@ -663,16 +720,16 @@ function VideoCall() {
                                     {
                                         (messages || []).map((message, index)=>{
                                             return(
-                                                <div className = {`messageContainer ${message.sender ===  socketRef.current} ? 'yourMessage' : 'othersMessage'`} key={index}>
-                                                    <p>Username: {message.sender}</p>
-                                                    <p style={{"color": "black"}}>{message.message}</p>                                                    
+                                                <div className = {`messageContainer ${message.sender ===  username ? 'yourMessage' : 'othersMessage'}`} key={index}>
+                                                    <p><b>Username: {message.sender}</b></p>
+                                                    <p style={{"color": "white"}}>{message.message}</p>                                                    
                                                 </div>
                                             )
                                         })
                                     }
                                 </div>
                                 <div className="chatInputBox">
-                                    <Input value={message} onChange={handleOnChange} labelText="Say something..."/>
+                                    <Input value={message} onEnter={sendMessage} onChange={handleOnChange} labelText="Say something..."/>
                                     <MessageSendButton onClick={sendMessage} />                                    
                                 </div>
                             </div>                         
@@ -710,48 +767,9 @@ function VideoCall() {
                         
                         {/* Other users' videos */}
                         {
-                            videos.map((videoObject)=>{ 
-                                return(
-                                    <div key={videoObject.socketId} className="conference-view other-user-video-container">
-                                        <div className="user-information">
-                                            <h2>
-                                                User: {videoObject.socketId.substring(0, 8)}...
-                                            </h2>
-                                        </div>                                        
-                                        
-                                        {
-                                            videoObject.videoEnabled === false ?  // Check remote user's video state
-                                            <div className="videoOffScreen">
-                                                <i className="fa-solid fa-video-slash"></i> 
-                                            </div> : 
-                                            <video 
-                                                className="other-users-video"
-                                                data-socket={videoObject.socketId}
-                                                ref={(ref)=>{
-                                                    if(ref && videoObject.stream){
-                                                        console.log('Setting video stream for:', videoObject.socketId);
-                                                        ref.srcObject = videoObject.stream
-                                                    }
-                                                }}
-                                                autoPlay 
-                                                muted
-                                                playsInline
-                                            ></video>
-                                        }
-                                        {
-                                            // Audio badge for other users
-                                            videoObject.audioEnabled === false &&
-                                            <div className="badgeContainer">
-                                                <div className="audioOffBadge">
-                                                    <span className="material-symbols-outlined">
-                                                        mic_off
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
-                                )
-                            })
+                            videos.map((videoObject) => (
+                                <RemoteVideo key={videoObject.socketId} videoObject={videoObject} />
+                            ))
                         }
                     </div>
                 </div>
