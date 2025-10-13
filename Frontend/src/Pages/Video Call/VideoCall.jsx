@@ -621,14 +621,26 @@ function VideoCall() {
     
     let handleEndCall = ()=>{
         try{
-            let tracks = localVideoRef.current.srcObject.getTracks();
-            tracks.forEach((track)=>{
+            localVideoRef.current.srcObject.getTracks()
+            .forEach((track)=>{
                 track.stop()
             })
         }
         catch(e){
             console.log(`This error occured : ${e}`)
         }
+        // Close all the peer connections
+        for(let id in connections){
+            if(connections[id]){
+                connections[id].close() // close all the connections here
+            }
+        }
+        connections = {} // the list of connections for this user is now empty
+        // Disconnecting from the socket server
+        if(socketRef.current){
+            socketRef.current.disconnect()
+        }
+        // Redirect the leaving user to the home page
         router("/home")
     }
 
@@ -721,7 +733,7 @@ function VideoCall() {
                                         (messages || []).map((message, index)=>{
                                             return(
                                                 <div className = {`messageContainer ${message.sender ===  username ? 'yourMessage' : 'othersMessage'}`} key={index}>
-                                                    <p><b>Username: {message.sender}</b></p>
+                                                    <p><b>{message.sender}</b></p>
                                                     <p style={{"color": "white"}}>{message.message}</p>                                                    
                                                 </div>
                                             )
