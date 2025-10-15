@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -8,149 +7,149 @@
 body {
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
 
-.landingPageContainer{
+.landingPageContainer {
     height: 100vh;
     width: 100vw;
-    /*background: url("/background.png ");
-    background-repeat: no-repeat;
-    background-size: cover; */
     margin: 0;
     padding: 0;
+    position: relative;
     z-index: 1;
 }
 
-/* Remove all centering from landingPageContainer */
-.mainContentContainer{
-    height: 100vh;
-    width: 100vw;
+.mainContentContainer {
+    height: 100vh !important;
+    width: 100vw !important;    
     color: white;
     display: flex;
     align-items: center;
-    margin: 0;    
+    justify-content: space-between;
+    margin: 0;
+    padding: 0 6rem;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1;
-    margin-top: 4rem;
-    pointer-events: none;  
+    z-index: 2;
+    pointer-events: none;
+    gap: 4rem;
+    margin-top: 3rem;
 }
 
-.leftPart {         
-    width: 40%;
-    height: 100vh;    
-    margin-left: 4rem;
-    margin-top: 2rem;
-    padding: 2rem;
+.leftPart {
+    width: 50%;
+    max-width: 700px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    pointer-events: auto !important;
+    padding: 2rem;
+    padding-left: 3rem;
+    pointer-events: auto;
 }
 
 .rightPart {
-    width: 60%;
-    height: 100vh;
+    width: 45%;
+    max-width: 700px;
+    height: 80vh;
     display: flex;
-    justify-content: center;   
-    align-items: center; 
-    position: relative;        
-    margin-top: 2rem;
-    padding: 2rem;
-    margin-left: 10rem;
-    overflow: visible; 
-    pointer-events: auto !important;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: visible;
+    pointer-events: auto;
 }
 
-.mainHeading{
-    margin-left: 2rem;
+.mainHeading {
+    margin-bottom: 1rem;
 }
 
-.mainHeading h1{    
-    font-size: 40px;
+.mainHeading h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin: 0;
+    line-height: 1.1;
+}
+
+.desc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: baseline;
+    margin: 1.5rem 0;
+}
+
+.smallerHeading {
+    font-size: clamp(1rem, 2vw, 1.25rem);
     margin: 0;
 }
 
-.desc{
-    margin-left: 2rem;
-    display: flex;
-    gap: 0.5rem;
-}
-
-.smallerHeading{
-    font-size: 20px;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-}
-
-.companyName{
-    margin-top: 2.2rem;
-    font-size: 20px;
+.companyName {
+    font-size: clamp(1rem, 2vw, 1.25rem);
     font-weight: bold;
     font-family: 'Montserrat', sans-serif;
+    margin: 0;
 }
 
-.colouredHeading{
+.colouredHeading {
     color: orange;
 }
 
-.getStartedButton{
+.getStartedButton {
     position: relative;
     height: fit-content;
-    width: 9rem;
+    width: fit-content;
+    min-width: 9rem;
     background-color: orange;
-    font-size: 20px;
-    padding: 0.5rem 1rem 0.5rem 1rem;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    padding: 0.75rem 1.5rem;
     color: white;
     border-radius: 1rem;
     text-decoration: none;
     transition: all 0.3s ease-in-out;
     display: inline-block;
     margin: 2rem;
+    border: none;
+    cursor: pointer;
 }
 
-.getStartedButton:hover{
-    color: white;    
+.getStartedButton:hover {
+    color: white;
     transform: scale(1.05);
-    box-shadow: 0 0 1.5rem orange, inset 0 0 1.5rem orange; 
-    width: 11rem;   
+    box-shadow: 0 0 1.5rem orange, inset 0 0 1.5rem orange;
+    padding-right: 2.5rem;
 }
 
-.arrow{  
+.arrow {
     opacity: 0;
-    position: absolute;      
-    left: -20%;
-    margin-top: 0.4rem;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
     transition: all 0.3s ease-in-out;
 }
 
-.getStartedButton:hover .arrow{
-    left: 80%;
+.getStartedButton:hover .arrow {
     opacity: 1;
+    right: 0.75rem;
 }
 
 /* Styling for the images */
-
 .image {
-    height: 25rem;
-    width: 25rem;
+    height: clamp(20rem, 40vh, 28rem);
+    width: clamp(20rem, 40vh, 28rem);
     object-fit: cover;
     border-radius: 1.5rem;
     z-index: 2;
     position: relative;
+    cursor: pointer;
 }
 
-.image:hover{
-    cursor: pointer;    
-}
-
-.otherImages{
+.otherImages {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 40rem; /* Increased from 30rem to give more space */
-    height: 40rem; /* Increased from 15rem to give more space */
+    width: 100%;
+    height: 100%;
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 1;
@@ -158,49 +157,40 @@ body {
 
 .otherImages .smallImage {
     position: absolute;
-    height: 8rem; /* Reduced from 10rem */
-    width: 8rem;  /* Reduced from 10rem */
+    height: clamp(6rem, 12vh, 8rem);
+    width: clamp(6rem, 12vh, 8rem);
     border-radius: 1.5rem;
     object-fit: cover;
-    padding: 0.3rem; /* Reduced padding */
+    padding: 0.3rem;
     opacity: 0;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(0.5);      
+    transform: translate(-50%, -50%) scale(0.5);
 }
 
-/*Add different transition timings for better animations*/
-
+/* Add different transition timings for better animations */
 .otherImages .smallImage:nth-child(1) {
     transition: 
-        opacity 0.3s ease-in-out 0.05s, 
-        transform 0.3s ease-in-out 0.05s, 
-        top 0.3s ease-in-out 0.05s, 
+        opacity 0.3s ease-in-out 0.05s,
+        transform 0.3s ease-in-out 0.05s,
+        top 0.3s ease-in-out 0.05s,
         left 0.3s ease-in-out 0.05s;
 }
 
 .otherImages .smallImage:nth-child(2) {
     transition: 
-        opacity 0.35s ease-in-out 0.1s, 
-        transform 0.35s ease-in-out 0.1s, 
-        top 0.35s ease-in-out 0.1s, 
+        opacity 0.35s ease-in-out 0.1s,
+        transform 0.35s ease-in-out 0.1s,
+        top 0.35s ease-in-out 0.1s,
         left 0.35s ease-in-out 0.1s;
 }
 
 .otherImages .smallImage:nth-child(3) {
     transition: 
-        opacity 0.4s ease-in-out 0.15s, 
-        transform 0.4s ease-in-out 0.15s, 
-        top 0.4s ease-in-out 0.15s, 
+        opacity 0.4s ease-in-out 0.15s,
+        transform 0.4s ease-in-out 0.15s,
+        top 0.4s ease-in-out 0.15s,
         left 0.4s ease-in-out 0.15s;
-}
-
-.otherImages .smallImage:nth-child(4) {
-    transition: 
-        opacity 0.45s ease-in-out 0.2s, 
-        transform 0.45s ease-in-out 0.2s, 
-        top 0.45s ease-in-out 0.2s, 
-        left 0.45s ease-in-out 0.2s;
 }
 
 .rightPart:hover .otherImages .smallImage {
@@ -208,16 +198,64 @@ body {
     transform: translate(-50%, -50%) scale(1);
 }
 
-/* FIXED: Better positioning that stays within viewport */
 .rightPart:hover .otherImages .smallImage:nth-child(1) {
-    top: 15%; /* Top right */
-    left: 80%;
+    top: 15%;
+    left: 85%;
 }
+
 .rightPart:hover .otherImages .smallImage:nth-child(2) {
-    top: 80%; /* Bottom left */
-    left: 20%;
+    top: 85%;
+    left: 15%;
 }
+
 .rightPart:hover .otherImages .smallImage:nth-child(3) {
-    top: 20%; /* Top left */
-    left: 10%;
+    top: 20%;
+    left: 15%;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .mainContentContainer {
+        flex-direction: column;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+
+    .leftPart {
+        width: 100%;
+        max-width: none;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .rightPart {
+        width: 100%;
+        max-width: none;
+        height: 50vh;
+        margin-top: 2rem;
+    }
+
+    .mainHeading h1 {
+        text-align: center;
+    }
+
+    .desc {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .mainHeading h1 {
+        font-size: 2rem;
+    }
+
+    .image {
+        height: 18rem;
+        width: 18rem;
+    }
+
+    .otherImages .smallImage {
+        height: 5rem;
+        width: 5rem;
+    }
 }
