@@ -1,4 +1,452 @@
-.mainContentContainer{
+/* Full viewport container */
+.homePageContainer {
     height: 100vh;
-    width: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+}
+
+/* Animated background decorations */
+.background-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.floating-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.12;
+    animation: float 20s infinite ease-in-out;
+}
+
+.circle-1 {
+    width: 400px;
+    height: 400px;
+    background: #ff6b6b;
+    top: -100px;
+    right: -100px;
+    animation-delay: 0s;
+}
+
+.circle-2 {
+    width: 300px;
+    height: 300px;
+    background: #4ecdc4;
+    bottom: -80px;
+    left: -80px;
+    animation-delay: 5s;
+}
+
+.circle-3 {
+    width: 200px;
+    height: 200px;
+    background: #ffbe76;
+    top: 40%;
+    right: 10%;
+    animation-delay: 10s;
+}
+
+.geometric-shape {
+    position: absolute;
+    opacity: 0.08;
+    animation: rotate 30s infinite linear;
+}
+
+.shape-1 {
+    width: 150px;
+    height: 150px;
+    background: #ff6b6b;
+    top: 20%;
+    left: 15%;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.shape-2 {
+    width: 120px;
+    height: 120px;
+    background: #4ecdc4;
+    bottom: 25%;
+    right: 20%;
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    animation-direction: reverse;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        transform: translate(30px, -30px) scale(1.1);
+    }
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Header section */
+.headingContainer {  
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5rem;
+    color: #f8f9fa;
+    z-index: 10;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-top: 2rem;
+}
+
+.logoutButtonContainer {
+    position: absolute;
+    top: 2.5rem;
+    right: 3.5rem; 
+    padding: 1rem;   
+    z-index: 10;
+}
+
+/* Main content */
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    padding: 2rem;
+    margin-top: 3rem;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    max-width: 800px;
+    width: 100%;
+    animation: fadeInUp 0.8s ease-out 0.3s backwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Subtitle section */
+.subtitle-container {
+    text-align: center;
+    animation: fadeInUp 0.8s ease-out 0.5s backwards;
+}
+
+.subtitle {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #f8f9fa;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -1px;
+}
+
+.description {
+    font-size: 1.2rem;
+    color: #b8c1cc;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Meeting buttons */
+.buttons-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    padding: 1rem;
+}
+
+.meeting-button {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem 2.5rem;
+    border: none;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    min-width: 320px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.meeting-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.start-meeting {
+    border: 2px solid #ff6b6b;
+    color: #ff8e8e;
+}
+
+.start-meeting::before {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+}
+
+.start-meeting:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 5px rgba(255, 107, 107, 0.4),
+                0 0 10px rgba(255, 107, 107, 0.4),
+                0 0 15px rgba(255, 107, 107, 0.4),
+                0 0 20px rgba(255, 107, 107, 0.4),
+                0 0 25px rgba(255, 107, 107, 0.4),
+                0 0 30px rgba(255, 107, 107, 0.4),
+                0 0 35px rgba(255, 107, 107, 0.4);
+    color: white;
+    border-color: transparent;
+}
+
+.start-meeting:hover::before {
+    opacity: 1;
+}
+
+.join-meeting {
+    border: 2px solid #4ecdc4;
+    color: #6eddd6;
+}
+
+.join-meeting::before {
+    background: linear-gradient(135deg, #4ecdc4 0%, #6eddd6 100%);
+}
+
+.join-meeting:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 5px rgba(78, 205, 196, 0.4),
+    0 0 10px rgba(78, 205, 196, 0.4),
+    0 0 15px rgba(78, 205, 196, 0.4),
+    0 0 20px rgba(78, 205, 196, 0.4),
+    0 0 25px rgba(78, 205, 196, 0.4),
+    0 0 30px rgba(78, 205, 196, 0.4),
+    0 0 35px rgba(78, 205, 196, 0.4);
+    color: white;
+    border-color: transparent;
+}
+
+.join-meeting:hover::before {
+    opacity: 1;
+}
+
+.meeting-button:active {
+    transform: translateY(-2px);
+}
+
+.button-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.meeting-button:hover .button-icon {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1) rotate(5deg);
+}
+
+.button-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+
+.button-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.button-subtitle {
+    font-size: 0.875rem;
+    opacity: 0.7;
+    font-weight: 400;
+}
+
+.button-arrow {
+    font-size: 1.5rem;
+    font-weight: 700;
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.meeting-button:hover .button-arrow {
+    transform: translateX(5px);
+}
+
+/* Features section */
+.features-container {
+    margin-top: 1rem;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease-out 0.7s backwards;
+    padding: 1rem;
+}
+
+.feature-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    cursor: default;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.feature-icon {
+    font-size: 1.5rem;
+    animation: bounce 2s infinite;
+}
+
+.feature-card:nth-child(2) .feature-icon {
+    animation-delay: 0.2s;
+}
+
+.feature-card:nth-child(3) .feature-icon {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.feature-text {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e9ecef;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .headingContainer {
+        font-size: 2rem;
+        top: 2rem;
+    }
+
+    .logoutButtonContainer {
+        top: 2rem;
+        right: 2rem;
+        padding: 0.5rem;
+    }
+
+    .subtitle {
+        font-size: 2rem;
+    }
+
+    .description {
+        font-size: 1rem;
+    }
+
+    .buttons-container {
+        gap: 1.5rem;
+    }
+
+    .meeting-button {
+        min-width: 280px;
+        padding: 1.5rem 2rem;
+    }
+
+    .features-container {
+        gap: 1rem;
+    }
+
+    .feature-card {
+        padding: 0.75rem 1.25rem;
+    }
+
+    .circle-1, .circle-2, .circle-3 {
+        opacity: 0.08;
+    }
+}
+
+@media (max-width: 480px) {
+    .headingContainer {
+        font-size: 1.5rem;
+        left: 50%;
+        width: 80%;
+    }
+
+    .subtitle {
+        font-size: 1.5rem;
+    }
+
+    .meeting-button {
+        min-width: 100%;
+    }
+
+    .features-container {
+        flex-direction: column;
+        align-items: center;
+    }
 }
