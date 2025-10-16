@@ -6,6 +6,7 @@ import {useRef} from 'react'
 import { color } from "motion/react";
 import { AuthContext } from "../../Contexts/AuthContext.jsx";
 import httpStatus from "http-status"
+import {useNavigate} from 'react-router-dom'
 
 import Button from "./Submit Button/Button.jsx"
 
@@ -13,6 +14,7 @@ import Button from "./Submit Button/Button.jsx"
 
 
 function Auth() {
+    const router = useNavigate()
     const containerRef = useRef(null)
     const [username, setUsername] = useState('');
     const [name, setName] = useState('');
@@ -51,6 +53,7 @@ function Auth() {
                 let result = await handleLogin(username, password)
                 console.log(`Result : ${result}`)
                 setMessage("Login Successful !!!")
+                router("/home")
                 setError('')
                 setUsername('');
                 setName('');
