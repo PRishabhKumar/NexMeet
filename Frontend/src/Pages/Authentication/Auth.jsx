@@ -52,13 +52,15 @@ function Auth() {
             if(formState === 0){
                 let result = await handleLogin(username, password)
                 console.log(`Result : ${result}`)
-                setMessage("Login Successful !!!")
-                router("/home")
+                setMessage("Login Successful !!!")                
                 setError('')
                 setUsername('');
                 setName('');
                 setPassword('');
-
+                // wait for the success animation to complete and then route to the home page
+                setTimeout(()=>{
+                    router("/home")
+                }, 2000)
             }
         }
         catch(err){

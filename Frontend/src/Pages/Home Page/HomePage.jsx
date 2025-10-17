@@ -2,9 +2,15 @@ import "./Styles/HomePageStyles.css";
 import SplitText from "./SplitText";
 import LogoutButton from "./LogoutButton";
 import {useNavigate} from 'react-router-dom'
+import { useContext } from "react";
+import { AuthContext } from "../../Contexts/AuthContext";
+import {toast, Toaster} from 'react-hot-toast'
+import { useState } from "react";
 
 function HomePage() {
-
+  const {handleLogout, userData} = useContext(AuthContext)
+  const isUserLoggedIn = userData !== null
+  const [displayAlert, setDisplayAlert] = useState(false)
   function generateRoomName(length = 5) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -34,6 +40,20 @@ function HomePage() {
     router("/joinMeeting")   
   };
 
+  const handleLogoutButtonClick = async()=>{
+    try{
+      await handleLogout(); 
+      // setDisplayAlert(true) // this will render the comoponent
+      // setTimeout(()=>{
+      //   setDisplayAlert(false)
+      // }, 2000)     
+      alert("You are successfully logged out")
+    }
+    catch(e){
+      console.log(`This error occured in logging out the user : ${e}`)
+    }
+  }
+
   const handleStartMeeting = () => {
     console.log('Start meeting clicked');
     let roomName = generateRoomName()
@@ -45,7 +65,7 @@ function HomePage() {
   };
 
   return (
-    <div className="homePageContainer">
+    <div className="homePageContainer">      
       {/* Animated background elements */}
       <div className="background-decoration">
         <div className="floating-circle circle-1"></div>
@@ -73,9 +93,15 @@ function HomePage() {
         />
       </div>
 
-      <div className="logoutButtonContainer">
-        <LogoutButton />
-      </div>
+      {
+        isUserLoggedIn && (
+          <div className="logoutButtonContainer">
+            <LogoutButton onClick={()=>{
+              handleLogoutButtonClick()
+            }}/>
+          </div>
+        )
+      }
 
       {/* Main content area */}
       <div className="main-content">
@@ -131,8 +157,22 @@ function HomePage() {
               <div className="feature-icon">🎯</div>
               <p className="feature-text">HD Quality</p>
             </div>
-          </div>
+          </div>          
         </div>
+          <div className="goBackButtonContainer">
+            <button className="go-back-button" onClick={() => router("/")}>
+              <span className="go-back-glow"></span>
+              <span className="go-back-text">← Go Back to Home</span>
+            </button>
+          </div>
+          {/* Alert for successful logout */}
+          {
+            displayAlert && (
+              <div className="logoutSuccessMessageContainer">
+                <h3>You have been successfully logged out !!!</h3>
+              </div>    
+            )
+          }
       </div>
     </div>
   );

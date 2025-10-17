@@ -387,6 +387,144 @@
     color: #e9ecef;
 }
 
+/* Styling for the button to go back home */
+
+.goBackButtonContainer {
+    position: fixed !important;
+    top: 2.5rem;
+    left: 3.5rem;
+    z-index: 10;
+    padding: 1rem;
+    opacity: 0;
+    animation: homeButtonFadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes homeButtonFadeIn{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+.go-back-button {
+    position: relative;
+    overflow: hidden;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f8f9fa;
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+@keyframes floatUpDown {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.go-back-button:hover {
+    color: #ffffff;
+    border-color: #6eddd6;
+    box-shadow: 0 0 10px rgba(78, 205, 196, 0.6),
+                0 0 20px rgba(78, 205, 196, 0.4),
+                0 0 30px rgba(78, 205, 196, 0.3);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.go-back-glow {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(78,205,196,0.2) 0%, transparent 70%);
+    animation: glowPulse 3s infinite ease-in-out;
+    z-index: 0;
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+.go-back-text {
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+}
+
+.go-back-button:hover .go-back-text {
+    color: #4ecdc4;
+}
+
+/* Design for sucess alert for logout */
+
+.logoutSuccessMessageContainer {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: linear-gradient(135deg, #00f0ff, #1f2937);
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: center;
+  z-index: 9999;
+  animation: showAlert 0.5s forwards, hideAlert 0.5s 2.5s forwards;
+}
+
+.logoutSuccessMessageContainer h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Animation to pop-in */
+@keyframes showAlert {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+/* Animation to fade-out */
+@keyframes hideAlert {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+  }
+}
+
+
 /* Responsive design */
 @media (max-width: 768px) {
     .headingContainer {
@@ -398,6 +536,16 @@
         top: 2rem;
         right: 2rem;
         padding: 0.5rem;
+    }
+
+    .goBackButtonContainer {
+        top: 2rem;
+        left: 2rem;
+    }
+
+    .go-back-button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
     }
 
     .subtitle {
@@ -435,6 +583,16 @@
         font-size: 1.5rem;
         left: 50%;
         width: 80%;
+    }
+
+    .goBackButtonContainer {
+        top: 1.5rem;
+        left: 1rem;
+    }
+
+    .go-back-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
     }
 
     .subtitle {

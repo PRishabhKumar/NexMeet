@@ -38,7 +38,11 @@ export const AuthProvider = ({ children }) => {
                 password: password
             })
             if(request.status === httpStatus.OK){
-                localStorage.setItem("token", request.data.token)                
+                localStorage.setItem("token", request.data.token)            
+                setUserData({
+                    username: username,
+                    token: request.data.token
+                })    
             }
             return request.data.message || "Login Successful !!!"
         }
@@ -47,11 +51,18 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const handleLogout = async()=>{
+        setUserData(null) // remove all the user's data that is stored because of the login
+        localStorage.removeItem("token") // remove the authentication token of this user from the local storage
+        router("/") // redirect the user back to the landing page
+    }
+
     const data = {
         userData,
         setUserData,
         handleRegister,
-        handleLogin
+        handleLogin,
+        handleLogout
     };
 
     return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;

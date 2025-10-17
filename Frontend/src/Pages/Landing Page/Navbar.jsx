@@ -12,7 +12,7 @@ function Navbar() {
                         <div className="container-fluid justify-content-end">
                             <ul className="navbar-nav">
                                 <li className="nav-item">
-                                    <a className="nav-link active" aria-current="page" href="#">Join as Guest</a>
+                                    <a className="nav-link active" aria-current="page" href="/home">Join as Guest</a>
                                 </li>
                                 <li className="nav-item">
                                     <a className="nav-link active" href="/auth">Register</a>

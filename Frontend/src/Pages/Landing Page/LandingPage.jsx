@@ -1,11 +1,23 @@
 import Navbar from "./Navbar";
 import "./Styles/LandingPage.css";
-
+import GridBg from "./Background/GridBg"
 
 function LandingPage() {
     return (
         <div className="landingPageContainer">
             
+            <div className="backgroundContainer">
+                <GridBg
+                    gridSize={40}
+                    darkGridColor="#1f2937"
+                    darkEffectColor="rgba(0, 255, 255, 0.6)"
+                    trailLength={10}
+                    glow
+                    glowRadius={100}
+                    showFade
+                    fadeIntensity={25}
+                />
+            </div>
 
             {/* Navbar */}
             <div className="navbarContainer" style={{ position: 'relative', zIndex: 10 }}>
