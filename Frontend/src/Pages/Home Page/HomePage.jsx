@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../Contexts/AuthContext";
 import {toast, Toaster} from 'react-hot-toast'
 import { useState } from "react";
+import WithAuth from "../../Utils/WithAuth";
 
 function HomePage() {
   const {handleLogout, userData} = useContext(AuthContext)
@@ -178,4 +179,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default WithAuth(HomePage);
