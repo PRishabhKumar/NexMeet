@@ -6,13 +6,13 @@ const MeetingSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    usernmae: {
+    username: {
         type: String,
         required: true
     },
     meetingPassword: {
         type: String,
-        required: true,
+        required: false,
         unique: true
     },
     meetingDate: {

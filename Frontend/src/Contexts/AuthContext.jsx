@@ -38,7 +38,8 @@ export const AuthProvider = ({ children }) => {
                 password: password
             })
             if(request.status === httpStatus.OK){
-                localStorage.setItem("token", request.data.token)            
+                localStorage.setItem("token", request.data.token) 
+                localStorage.setItem("username", request.data.username)           
                 setUserData({
                     username: username,
                     token: request.data.token
@@ -54,6 +55,8 @@ export const AuthProvider = ({ children }) => {
     const handleLogout = async()=>{
         setUserData(null) // remove all the user's data that is stored because of the login
         localStorage.removeItem("token") // remove the authentication token of this user from the local storage
+        localStorage.removeItem("username")
+        console.log("Logged out")
         router("/") // redirect the user back to the landing page
     }
 

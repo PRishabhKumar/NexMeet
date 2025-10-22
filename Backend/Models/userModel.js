@@ -18,7 +18,7 @@ const userSchema = mongoose.Schema(
         },
         token: {
             type: String
-        }
+        }        
     }    
 )
 

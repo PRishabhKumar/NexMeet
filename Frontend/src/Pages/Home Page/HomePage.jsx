@@ -10,7 +10,7 @@ import WithAuth from "../../Utils/WithAuth";
 
 function HomePage() {
   const {handleLogout, userData} = useContext(AuthContext)
-  const isUserLoggedIn = userData !== null
+  const isUserLoggedIn = localStorage.getItem("username") && localStorage.getItem("token")
   const [displayAlert, setDisplayAlert] = useState(false)
   function generateRoomName(length = 5) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -65,6 +65,10 @@ function HomePage() {
     })
   };
 
+  const showHistory = ()=>{
+    router("/history")
+  }
+
   return (
     <div className="homePageContainer">      
       {/* Animated background elements */}
@@ -94,12 +98,19 @@ function HomePage() {
         />
       </div>
 
+      
+
       {
         isUserLoggedIn && (
-          <div className="logoutButtonContainer">
+          <div className="buttonsContainer">
+            <div className="logoutButtonContainer">
             <LogoutButton onClick={()=>{
               handleLogoutButtonClick()
             }}/>
+            </div>
+            <div className="historyButtonContainer">
+              <a className="historyButton" href="/history"><i className="historyIcon fa-solid fa-clock-rotate-left"></i><p className="HistoryText">View your past meetings</p></a>
+            </div>
           </div>
         )
       }

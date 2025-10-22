@@ -4,6 +4,7 @@ import crypto from "crypto"
 import httpStatus from "http-status"
 import {User} from "../Models/userModel.js"
 import bcrypt, {hash} from "bcrypt"
+import { MeetingModel } from "../Models/MeetingModel.js"
 
 
 // function to register the user 
@@ -58,7 +59,7 @@ const authenticateUser = async (req, res)=>{
             user.token = token; 
             // Save the user again to update details
             await user.save();
-            return res.status(httpStatus.OK).json({message: "User authenticated successfully !!!", token})
+            return res.status(httpStatus.OK).json({message: "User authenticated successfully !!!", token, username: user.username})
         }
         else{
             return res.status(httpStatus.UNAUTHORIZED).json({message: "Invalid credentials. Please try again"})
@@ -70,4 +71,35 @@ const authenticateUser = async (req, res)=>{
     }
 }
 
-export {registerUser, authenticateUser}
+const addUserMeeting = async(req, res)=>{
+    try{
+        console.log(`Req body : ${JSON.stringify(req.body)}`)
+        console.log(`Req params : ${JSON.stringify(req.params)}`)
+        let username = req.params.username // get the username from the request string
+        const {meetingID, meetingDate} = req.body 
+        const newMeeting = new MeetingModel({
+            username,
+            meetingID,
+            meetingDate: meetingDate || Date.now()
+        })
+        await newMeeting.save()
+        res.status(201).json({message: "Meeting details addedd successfully !!!"})
+
+    }   
+    catch(e){
+        res.status(500).json({message: `This error occured while fetching the user to add the meeting details : ${e}`})
+    } 
+}
+
+const findUserMeetings = async(req, res)=>{
+    try{
+        const username = req.params.username
+        const meetings = await MeetingModel.find({username})
+        res.status(200).json({message: "Meeting details fetched successfully !!!", meetings})        
+    }
+    catch(e){
+        res.status(500).json({message: "There was some server error in fetching the meetings for the given user"})
+    }
+}
+
+export {registerUser, authenticateUser, addUserMeeting, findUserMeetings}
