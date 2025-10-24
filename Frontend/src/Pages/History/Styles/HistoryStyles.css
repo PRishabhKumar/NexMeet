@@ -1,3 +1,232 @@
-.container h1{
-    background-color: yellow;
+/*
+ * Full Redesign: Sophisticated Dark Mode / High-Tech Luminous Theme
+ * Goal: Keep the dark, premium feel, but remove the aggressive neon glow.
+ * Palette: Deep Blue-Black, Refined Electric Blue, and Amethyst.
+ */
+
+/* --- Global Reset & Variables --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+:root {
+    /* Color Palette */
+    --bg-deep: #05050C; /* Very dark blue-black */
+    --bg-card: rgba(15, 25, 45, 0.7); /* Translucent dark blue, slightly richer */
+    --text-primary: #E0F7FA; /* Cool white */
+    --text-secondary: #9DB5C8; /* Muted blue-grey */
+    --accent-cyan: #00BFFF; /* Electric Blue (More refined than neon) */
+    --accent-magenta: #BA68C8; /* Amethyst/Orchid (Sophisticated purple) */
+    
+    /* Shadows & Effects - Significantly Muted */
+    --shadow-sm: 0 0 3px rgba(0, 191, 255, 0.3);
+    --shadow-lg: 0 0 8px rgba(0, 191, 255, 0.5);
+    --shadow-dark: rgba(0, 0, 0, 0.7);
+}
+
+/* --- Body & Background --- */
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  /* Digital Grid Background Effect - Significantly reduced opacity */
+  background-image: 
+    linear-gradient(to right, rgba(0, 191, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 191, 255, 0.02) 1px, transparent 1px);
+  background-size: 25px 25px;
+  background-attachment: fixed;
+  animation: backgroundPulse 20s infinite alternate; /* Slower pulse */
+}
+
+/* --- Keyframe Animations --- */
+@keyframes backgroundPulse {
+    from { background-position: 0 0; }
+    to { background-position: 100px 100px; }
+}
+
+/* Glitch animation removed for a calmer aesthetic */
+
+@keyframes scanline {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+/* --- Main Layout: meetingsContainer --- */
+.meetingsContainer {
+  height: 100vh;
+  padding: 4rem 2rem 6rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;  
+  backdrop-filter: blur(10px); 
+  background: rgba(5, 10, 20, 0.6);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar Styling */
+.meetingsContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.meetingsContainer::-webkit-scrollbar-track {
+  background: rgba(15, 25, 45, 0.3);
+}
+
+.meetingsContainer::-webkit-scrollbar-thumb {
+  background: var(--accent-cyan);
+  border-radius: 4px;
+}
+
+.meetingsContainer::-webkit-scrollbar-thumb:hover {
+  background: #39D6FF;
+}
+
+/* --- Header Styling (Muted Luminous Glow) --- */
+.header {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 4rem;
+  text-align: center;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  flex-shrink: 0;
+  /* Muted Cyan Glow - Focus on soft diffusion, not blinding neon */
+  text-shadow: 0 0 5px var(--accent-cyan), 0 0 10px rgba(0, 191, 255, 0.4);
+}
+
+/* --- Meetings List Container --- */
+.meetingsList {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    padding: 1rem;
+    flex-shrink: 0;
+}
+
+/* --- Individual Meeting Item Styling (Refined Card) --- */
+.meetingContainer {
+  background: var(--bg-card);
+  border: 1px solid rgba(0, 191, 255, 0.1); 
+  border-radius: 12px;
+  padding: 1.8rem 2.5rem;
+  /* Deep shadow for depth */
+  box-shadow: 0 6px 15px var(--shadow-dark);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  
+  /* Scanline/Data Effect - Reduced opacity */
+  background-image: linear-gradient(
+    rgba(0, 191, 255, 0.02) 1px, transparent 1px
+  );
+  background-size: 100% 4px;
+  animation: scanline 40s linear infinite;
+}
+
+/* Hover Effect: Subtle Lift and Luminous Border */
+.meetingContainer:hover {
+  transform: translateY(-5px) scale(1.005);
+  /* Subtle, sophisticated glow effect */
+  box-shadow: 0 8px 25px var(--shadow-dark), 0 0 10px rgba(0, 191, 255, 0.4);
+  border-color: var(--accent-cyan);
+}
+
+.meetingContainer h3 {
+    margin: 0.3rem 0;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+/* Highlight the Meeting ID with Amethyst Accent */
+.meetingContainer h3:first-child {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--accent-magenta);
+    text-shadow: 0 0 2px rgba(186, 104, 200, 0.4);
+    margin-bottom: 0.8rem;
+}
+
+
+/* --- Not Found State --- */
+.notFoundContainer {
+    padding: 6rem;
+    text-align: center;
+    background-color: rgba(15, 25, 45, 0.9);
+    border: 1px dashed var(--accent-cyan);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+}
+
+.notFoundContainer h1 {
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+
+/* --- Back to Home Button (Clean, Luminous Style) --- */
+.backToHomeButtonContainer {
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    flex-shrink: 0;
+}
+
+.backToHomeButtonContainer button {
+    font-size: 1.1rem;
+    padding: 1rem 3rem;
+    border: none; /* Removed thick border for cleaner look */
+    border-radius: 50px; /* Pill shape for premium feel */
+    /* Use a solid Electric Blue color */
+    background: var(--accent-cyan);
+    color: var(--bg-deep); 
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 5px 15px rgba(0, 191, 255, 0.5); /* Soft shadow */
+}
+
+.backToHomeButtonContainer button:hover {
+  background: #39D6FF; /* Slightly brighter on hover */
+  /* Replaced glitch with a clean, light pulse effect */
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 191, 255, 0.7);
+}
+
+.backToHomeButtonContainer button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0, 191, 255, 0.5);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .meetingsContainer {
+        padding: 2rem 1rem;
+        gap: 2rem;
+    }
+    .header {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+    .meetingContainer {
+        padding: 1.2rem 1.5rem;
+    }
+    .meetingContainer h3 {
+        font-size: 0.9rem;
+    }
+    .meetingContainer h3:first-child {
+        font-size: 1.1rem;
+    }
 }

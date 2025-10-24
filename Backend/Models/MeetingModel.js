@@ -12,8 +12,7 @@ const MeetingSchema = new mongoose.Schema({
     },
     meetingPassword: {
         type: String,
-        required: false,
-        unique: true
+        required: false,        
     },
     meetingDate: {
         type: Date,
