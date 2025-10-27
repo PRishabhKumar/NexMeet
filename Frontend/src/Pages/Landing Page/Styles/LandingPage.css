@@ -213,49 +213,208 @@ body {
     left: 15%;
 }
 
-/* Responsive Design */
+/* =========================================================
+   RESPONSIVE DESIGN — OPTIMIZED FOR ALL SCREEN SIZES
+   ========================================================= */
+
+/* ======= LARGE TABLETS / SMALL LAPTOPS (max-width: 1200px) ======= */
 @media (max-width: 1200px) {
     .mainContentContainer {
         flex-direction: column;
         justify-content: center;
-        padding: 2rem 1rem;
+        align-items: center;
+        padding: 2rem 2rem;
+        text-align: center;
+        gap: 3rem;
     }
 
-    .leftPart {
+    .leftPart, .rightPart {
         width: 100%;
-        max-width: none;
-        text-align: center;
+        max-width: 90%;
         padding: 1rem;
     }
 
     .rightPart {
-        width: 100%;
-        max-width: none;
-        height: 50vh;
-        margin-top: 2rem;
+        height: auto;
     }
 
     .mainHeading h1 {
-        text-align: center;
+        font-size: 2.5rem;
     }
 
     .desc {
         justify-content: center;
     }
+
+    /* ===== RESPONSIVE NAVBAR FONT — 1200px ===== */
+    .navbar .logoText, 
+    .navbar .appName, 
+    .nextMeetTitle {
+        font-size: 1.7rem;
+    }
 }
 
-@media (max-width: 768px) {
+/* ======= TABLETS (max-width: 992px) ======= */
+@media (max-width: 992px) {
     .mainHeading h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
+    }
+
+    .getStartedButton {
+        font-size: 1rem;
+        padding: 0.6rem 1.25rem;
+        margin: 1.5rem auto;
+        display: block;
     }
 
     .image {
-        height: 18rem;
-        width: 18rem;
+        height: 16rem;
+        width: 16rem;
     }
 
     .otherImages .smallImage {
-        height: 5rem;
-        width: 5rem;
+        height: 5.5rem;
+        width: 5.5rem;
+    }
+
+    /* ===== RESPONSIVE NAVBAR FONT — 992px ===== */
+    .navbar .logoText, 
+    .navbar .appName, 
+    .nextMeetTitle {
+        font-size: 1.5rem;
     }
 }
+
+/* ======= MOBILE DEVICES (max-width: 768px) ======= */
+@media (max-width: 768px) {
+    .mainContentContainer {
+        flex-direction: column-reverse;
+        padding: 1.5rem;
+        gap: 2rem;
+    }
+
+    .leftPart {
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .mainHeading h1 {
+        font-size: 1.9rem;
+        line-height: 1.2;
+    }
+
+    .smallerHeading,
+    .companyName {
+        font-size: 1rem;
+    }
+
+    .getStartedButton {
+        min-width: 8rem;
+        padding: 0.6rem 1.2rem;
+    }
+
+    .rightPart {
+        height: auto;
+        margin-top: 1rem;
+    }
+
+    .image {
+        height: 14rem;
+        width: 14rem;
+    }
+
+    .otherImages .smallImage {
+        height: 4.5rem;
+        width: 4.5rem;
+    }
+
+    /* ===== RESPONSIVE NAVBAR FONT — 768px ===== */
+    .navbar .logoText, 
+    .navbar .appName, 
+    .nextMeetTitle {
+        font-size: 1.25rem;
+    }
+}
+
+/* ======= SMALL MOBILE DEVICES (max-width: 480px) ======= */
+@media (max-width: 480px) {
+    .mainContentContainer {
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+
+    .mainHeading h1 {
+        font-size: 1.6rem;
+    }
+
+    .desc {
+        flex-direction: column;
+        gap: 0.25rem;
+        align-items: center;
+    }
+
+    .getStartedButton {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+    }
+
+    .image {
+        height: 11rem;
+        width: 11rem;
+    }
+
+    .otherImages .smallImage {
+        height: 3.5rem;
+        width: 3.5rem;
+    }
+
+    /* ===== RESPONSIVE NAVBAR FONT — 480px ===== */
+    .navbar .logoText, 
+    .navbar .appName, 
+    .nextMeetTitle {
+        font-size: 1.05rem;
+    }
+}
+
+/* ======= VERY SMALL / OLD DEVICES (max-width: 360px) ======= */
+@media (max-width: 360px) {
+    .mainHeading h1 {
+        font-size: 1.4rem;
+    }
+
+    .getStartedButton {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.9rem;
+    }
+
+    .image {
+        height: 9rem;
+        width: 9rem;
+    }
+
+    .otherImages .smallImage {
+        height: 3rem;
+        width: 3rem;
+    }
+
+    /* ===== RESPONSIVE NAVBAR FONT — 360px ===== */
+    .navbar .logoText, 
+    .navbar .appName, 
+    .nextMeetTitle {
+        font-size: 0.9rem;
+    }
+}
+
+/* =========================================================
+   BASE FONT STYLE FOR "NEXTMEET"
+   ========================================================= */
+.navbar .logoText, 
+.navbar .appName, 
+.nextMeetTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    transition: font-size 0.3s ease-in-out;
+}
+

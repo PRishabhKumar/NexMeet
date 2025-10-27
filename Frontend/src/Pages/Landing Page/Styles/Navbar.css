@@ -12,7 +12,6 @@
     width: 100%;
     padding: 0.5rem 2rem;
     z-index: 1000;
-    position: fixed;    
     pointer-events: none;
 }
 
@@ -20,6 +19,21 @@
 .custom-navbar {
     background: transparent !important;
     box-shadow: none !important;
+}
+
+/* Force navbar items to stay on one line */
+.navbar-nav {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    flex-direction: row !important;
+}
+
+.navbar-collapse {
+    flex-wrap: nowrap !important;
+}
+
+.container-fluid {
+    flex-wrap: nowrap !important;
 }
 
 /* Heading styles */
@@ -30,6 +44,7 @@
     margin: 0;
     color: white;
     overflow: hidden;
+    white-space: nowrap;
 }
 
 /* Nav link styles */
@@ -46,6 +61,7 @@
     display: flex;
     gap: 1rem;
     pointer-events: auto !important;
+    white-space: nowrap;
 }
 
 .navbar-nav .nav-link:hover {
@@ -61,7 +77,6 @@
         0 0 5rem orange;
     transform: scale(1.05);
 }
-
 
 .navbar-nav{
     margin-right: 2.5rem;
@@ -83,4 +98,446 @@
     background-color: white !important;
     transform: scale(1.05);
     text-shadow: none !important;
+}
+
+/* ====================================
+   RESPONSIVE DESIGN STARTS HERE
+   MOBILE-FIRST APPROACH FOR NAVBAR
+   ==================================== */
+
+/* Large Desktops (1400px+) */
+@media screen and (min-width: 1400px) {
+    .navbar-container {
+        padding: 0.75rem 3rem !important;
+    }
+
+    .heading {
+        font-size: 2.75rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 1.6rem !important;
+        margin-left: 2.5rem !important;
+    }
+}
+
+/* Standard Desktops (1200px - 1399px) */
+@media screen and (max-width: 1399px) {
+    .navbar-container {
+        padding: 0.5rem 2rem !important;
+    }
+
+    .heading {
+        font-size: 2.3rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 1.4rem !important;
+        margin-left: 1.75rem !important;
+        padding: 0 0.9rem !important;
+    }
+
+    .navbar-nav {
+        margin-right: 2rem !important;
+    }
+}
+
+/* Tablets Landscape & Small Desktops (992px - 1199px) */
+@media screen and (max-width: 1199px) {
+    .navbar-container {
+        padding: 0.5rem 1.5rem !important;
+    }
+
+    .heading {
+        font-size: 2rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 1.25rem !important;
+        margin-left: 1.5rem !important;
+        padding: 0 0.8rem !important;
+        margin: 0.4rem !important;
+    }
+
+    .navbar-nav {
+        margin-right: 1.5rem !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .loginButton {
+        padding: 0 1.25rem !important;
+        margin-top: 0.4rem !important;
+    }
+}
+
+/* Critical fix for 996px onwards - prevent wrapping */
+@media screen and (max-width: 996px) {
+    .navbar-container {
+        padding: 0.4rem 1rem !important;
+    }
+
+    .heading {
+        font-size: 1.8rem !important;
+    }
+
+    .navbar-nav {
+        flex-wrap: nowrap !important;
+        gap: 0 !important;
+        margin-right: 1rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 1.15rem !important;
+        margin-left: 1rem !important;
+        padding: 0 0.7rem !important;
+        margin: 0.35rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    .loginButton {
+        padding: 0 1.1rem !important;
+        margin-top: 0.35rem !important;
+        flex-shrink: 0 !important;
+    }
+}
+
+/* Tablets Portrait (768px - 991px) */
+@media screen and (max-width: 991px) {
+    .navbar-container {
+        padding: 0.4rem 0.8rem !important;
+    }
+
+    .heading {
+        font-size: 1.65rem !important;
+    }
+
+    .navbar-nav {
+        flex-wrap: nowrap !important;
+        margin-right: 0.8rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 1.05rem !important;
+        margin-left: 0.8rem !important;
+        padding: 0 0.6rem !important;
+        margin: 0.3rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    .loginButton {
+        padding: 0 0.95rem !important;
+        margin-top: 0.3rem !important;
+        flex-shrink: 0 !important;
+    }
+}
+
+/* Large Mobile & Small Tablets (576px - 767px) */
+@media screen and (max-width: 767px) {
+    .navbar-container {
+        padding: 0.35rem 0.6rem !important;
+    }
+
+    .heading {
+        font-size: 1.4rem !important;
+    }
+
+    .navbar-nav {
+        flex-wrap: nowrap !important;
+        margin-right: 0.6rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 0.9rem !important;
+        margin-left: 0.6rem !important;
+        padding: 0 0.5rem !important;
+        margin: 0.25rem !important;
+        gap: 0.4rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    .loginButton {
+        padding: 0 0.85rem !important;
+        margin-top: 0.25rem !important;
+        border-radius: 0.4rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Reduce text shadow intensity on smaller screens */
+    .navbar-nav .nav-link:hover {
+        text-shadow: 
+            0 0 1rem orange,
+            0 0 1.5rem orange,
+            0 0 2rem orange;
+    }
+}
+
+/* Mobile Portrait (481px - 575px) */
+@media screen and (max-width: 575px) {
+    .navbar-container {
+        padding: 0.3rem 0.5rem !important;
+    }
+
+    .heading {
+        font-size: 1.2rem !important;
+    }
+
+    .navbar-nav {
+        flex-wrap: nowrap !important;
+        margin-right: 0.5rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 0.8rem !important;
+        margin-left: 0.5rem !important;
+        padding: 0 0.45rem !important;
+        margin: 0.2rem !important;
+        gap: 0.3rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    .loginButton {
+        padding: 0 0.75rem !important;
+        margin-top: 0.2rem !important;
+        border-radius: 0.35rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Further reduce hover effects */
+    .navbar-nav .nav-link:hover {
+        text-shadow: 
+            0 0 0.75rem orange,
+            0 0 1.25rem orange;
+        transform: scale(1.03);
+    }
+
+    .loginButton:hover {
+        transform: scale(1.03);
+    }
+}
+
+/* Small Mobile Devices (376px - 480px) */
+@media screen and (max-width: 480px) {
+    .navbar-container {
+        padding: 0.25rem 0.4rem !important;
+    }
+
+    .heading {
+        font-size: 1.05rem !important;
+    }
+
+    .navbar-nav {
+        flex-wrap: nowrap !important;
+        margin-right: 0.4rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 0.72rem !important;
+        margin-left: 0.4rem !important;
+        padding: 0 0.4rem !important;
+        margin: 0.15rem !important;
+        gap: 0.25rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    .loginButton {
+        padding: 0 0.65rem !important;
+        margin-top: 0.15rem !important;
+        border-radius: 0.3rem !important;
+        flex-shrink: 0 !important;
+    }
+}
+
+/* Extra Small Mobile (320px - 375px) */
+@media screen and (max-width: 375px) {
+    .navbar-container {
+        padding: 0.2rem 0.35rem !important;
+    }
+
+    .heading {
+        font-size: 0.95rem !important;
+    }
+
+    .navbar-nav {
+        flex-wrap: nowrap !important;
+        margin-right: 0.35rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 0.65rem !important;
+        margin-left: 0.35rem !important;
+        padding: 0 0.35rem !important;
+        margin: 0.12rem !important;
+        gap: 0.2rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    .loginButton {
+        padding: 0 0.55rem !important;
+        margin-top: 0.12rem !important;
+        border-radius: 0.25rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Minimal hover effects on very small screens */
+    .navbar-nav .nav-link:hover {
+        text-shadow: 0 0 0.5rem orange;
+        transform: scale(1.02);
+    }
+
+    .loginButton:hover {
+        transform: scale(1.02);
+    }
+}
+
+/* Ultra Small Mobile (max-width: 320px) */
+@media screen and (max-width: 320px) {
+    .navbar-container {
+        padding: 0.15rem 0.3rem !important;
+    }
+
+    .heading {
+        font-size: 0.85rem !important;
+    }
+
+    .navbar-nav {
+        flex-wrap: nowrap !important;
+        margin-right: 0.3rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 0.6rem !important;
+        margin-left: 0.3rem !important;
+        padding: 0 0.3rem !important;
+        margin: 0.1rem !important;
+        gap: 0.15rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    .loginButton {
+        padding: 0 0.5rem !important;
+        margin-top: 0.1rem !important;
+        border-radius: 0.2rem !important;
+        flex-shrink: 0 !important;
+    }
+}
+
+/* Landscape Orientation on Mobile Devices */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .navbar-container {
+        padding: 0.3rem 1rem !important;
+    }
+
+    .heading {
+        font-size: 1.25rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 0.8rem !important;
+        margin-left: 0.75rem !important;
+        padding: 0 0.5rem !important;
+        margin: 0.2rem !important;
+    }
+
+    .navbar-nav {
+        margin-right: 0.75rem !important;
+    }
+
+    .loginButton {
+        padding: 0 0.8rem !important;
+        margin-top: 0.2rem !important;
+    }
+}
+
+/* Very Small Landscape (iPhone SE landscape, etc.) */
+@media screen and (max-height: 400px) and (orientation: landscape) {
+    .navbar-container {
+        padding: 0.2rem 0.75rem !important;
+    }
+
+    .heading {
+        font-size: 1.1rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 0.7rem !important;
+        margin-left: 0.6rem !important;
+        padding: 0 0.4rem !important;
+        margin: 0.15rem !important;
+    }
+
+    .navbar-nav {
+        margin-right: 0.6rem !important;
+    }
+
+    .loginButton {
+        padding: 0 0.7rem !important;
+        margin-top: 0.15rem !important;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    /* Ensure touch targets are adequate (minimum 44x44px) */
+    .navbar-nav .nav-link {
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .loginButton {
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    /* Remove hover effects on touch devices, use active state instead */
+    .navbar-nav .nav-link:hover {
+        text-shadow: none;
+        transform: none;
+    }
+
+    .navbar-nav .nav-link:active {
+        text-shadow: 0 0 1rem orange;
+        transform: scale(0.98);
+    }
+
+    .loginButton:hover {
+        color: white !important;
+        background-color: orange !important;
+        transform: none;
+    }
+
+    .loginButton:active {
+        color: orange !important;
+        background-color: white !important;
+        transform: scale(0.98);
+    }
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+    .navbar-nav .nav-link,
+    .loginButton {
+        transition: none !important;
+    }
+
+    .navbar-nav .nav-link:hover,
+    .loginButton:hover {
+        transform: none !important;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .navbar-nav .nav-link {
+        border: 1px solid white !important;
+    }
+
+    .loginButton {
+        border: 2px solid white !important;
+    }
+
+    .heading {
+        text-shadow: 0 0 2px black !important;
+    }
 }

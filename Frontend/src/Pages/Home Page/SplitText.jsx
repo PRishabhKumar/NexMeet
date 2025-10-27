@@ -114,7 +114,7 @@ const SplitText = ({
       whiteSpace: 'normal',
       wordWrap: 'break-word',
       willChange: 'transform, opacity',
-      fontSize: tag.startsWith('h') ? '4rem' : '3rem' // Increased font size here
+      fontSize: tag.startsWith('h') ? '3rem' : '2rem' // Increased font size here
     };
     const classes = `split-parent ${className}`;
     switch (tag) {

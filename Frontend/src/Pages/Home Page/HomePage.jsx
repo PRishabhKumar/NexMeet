@@ -7,6 +7,7 @@ import { AuthContext } from "../../Contexts/AuthContext";
 import {toast, Toaster} from 'react-hot-toast'
 import { useState } from "react";
 import WithAuth from "../../Utils/WithAuth";
+import axios from "axios";
 
 function HomePage() {
   const {handleLogout, userData} = useContext(AuthContext)
@@ -44,10 +45,7 @@ function HomePage() {
   const handleLogoutButtonClick = async()=>{
     try{
       await handleLogout(); 
-      // setDisplayAlert(true) // this will render the comoponent
-      // setTimeout(()=>{
-      //   setDisplayAlert(false)
-      // }, 2000)     
+      setDisplayAlert(true)
       alert("You are successfully logged out")
     }
     catch(e){
@@ -55,14 +53,25 @@ function HomePage() {
     }
   }
 
-  const handleStartMeeting = () => {
-    console.log('Start meeting clicked');
-    let roomName = generateRoomName()
-    let url = `${window.location.origin}/${roomName}`
-    copyToClipboard(url)
-    .then(()=>{
-      router(`/${roomName}`)
-    })
+  const handleStartMeeting = async () => {
+    const username = localStorage.getItem("username")
+    if(!username){
+      console.log("Username not found !!!")
+    }
+    else{
+      console.log('Start meeting clicked');
+      let roomName = generateRoomName()
+      await axios.post(`http://localhost:3000/api/v1/users/add_activity/${username}`, {
+        meetingID: roomName,
+        meetingDate: Date.now()
+      })
+      console.log('Meeting added to the database successfully !!!')
+      let url = `${window.location.origin}/${roomName}`
+      copyToClipboard(url)
+      .then(()=>{
+          router(`/${roomName}`)
+        })
+      }
   };
 
   const showHistory = ()=>{
@@ -73,47 +82,47 @@ function HomePage() {
     <div className="homePageContainer">      
       {/* Animated background elements */}
       <div className="background-decoration">
-        <div className="floating-circle circle-1"></div>
-        <div className="floating-circle circle-2"></div>
-        <div className="floating-circle circle-3"></div>
         <div className="geometric-shape shape-1"></div>
         <div className="geometric-shape shape-2"></div>
       </div>
 
-      <div className="headingContainer">
-        <SplitText
-          text="Welcome back !!"
-          className="text-2xl font-semibold"
-          delay={100}
-          duration={0.6}
-          ease="power3.out"
-          splitType="chars"
-          from={{ opacity: 0, y: 40 }}
-          to={{ opacity: 1, y: 0 }}
-          threshold={0.1}
-          rootMargin="-100px"
-          textAlign="center"
-          onLetterAnimationComplete={handleAnimationComplete}
-          tag="h1"
-        />
+      <div className="navbarContainer container">
+        <div className="row navbarRow">
+          <div className="navbarItem left col-3">
+            <button className="go-back-button" onClick={() => router("/")}>
+                <span className="go-back-glow"></span>
+                <span className="go-back-text">← Home</span>
+            </button>
+          </div>
+          <div className="navbarItem center col-6">
+            <SplitText
+              text={`Welcome ${localStorage.getItem('username') ? localStorage.getItem("username") : User}`}
+              className="text-2xl font-semibold"
+              delay={100}
+              duration={0.6}
+              ease="power3.out"
+              splitType="chars"
+              from={{ opacity: 0, y: 40 }}
+              to={{ opacity: 1, y: 0 }}
+              threshold={0.1}
+              rootMargin="-100px"
+              textAlign="center"
+              onLetterAnimationComplete={handleAnimationComplete}
+              tag="h1"
+            />
+          </div>
+          <div className="navbarItem right rightButtonsContainer col-3"> 
+            <a className="historyButton" href="/history">
+                <i className="historyIcon fa-solid fa-clock-rotate-left"></i>
+                <p className="HistoryText">History</p>
+              </a>           
+            <div className="logoutButtonContainer">
+              <LogoutButton onClick={handleLogoutButtonClick}/></div>            
+          </div>
+        </div>
       </div>
 
       
-
-      {
-        isUserLoggedIn && (
-          <div className="buttonsContainer">
-            <div className="logoutButtonContainer">
-            <LogoutButton onClick={()=>{
-              handleLogoutButtonClick()
-            }}/>
-            </div>
-            <div className="historyButtonContainer">
-              <a className="historyButton" href="/history"><i className="historyIcon fa-solid fa-clock-rotate-left"></i><p className="HistoryText">View your past meetings</p></a>
-            </div>
-          </div>
-        )
-      }
 
       {/* Main content area */}
       <div className="main-content">
@@ -124,9 +133,7 @@ function HomePage() {
           </div>
 
           <div className="buttons-container">
-            <button className="meeting-button start-meeting" onClick={()=>{
-              handleStartMeeting()
-            }}>
+            <button className="meeting-button start-meeting" onClick={handleStartMeeting}>
               <div className="button-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M15 10L19.553 7.724C20.3597 7.32 21 7.82 21 8.724V15.276C21 16.18 20.3597 16.68 19.553 16.276L15 14M5 18H13C14.1046 18 15 17.1046 15 16V8C15 6.89543 14.1046 6 13 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -139,9 +146,7 @@ function HomePage() {
               <div className="button-arrow">→</div>
             </button>
 
-            <button className="meeting-button join-meeting" onClick={()=>{
-              handleJoinMeeting()
-            }}>
+            <button className="meeting-button join-meeting" onClick={handleJoinMeeting}>
               <div className="button-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M15 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H15M10 17L15 12M15 12L10 7M15 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -171,20 +176,13 @@ function HomePage() {
             </div>
           </div>          
         </div>
-          <div className="goBackButtonContainer">
-            <button className="go-back-button" onClick={() => router("/")}>
-              <span className="go-back-glow"></span>
-              <span className="go-back-text">← Go Back to Home</span>
-            </button>
-          </div>
-          {/* Alert for successful logout */}
-          {
-            displayAlert && (
-              <div className="logoutSuccessMessageContainer">
-                <h3>You have been successfully logged out !!!</h3>
-              </div>    
-            )
-          }
+
+        {/* Alert for successful logout */}
+        {displayAlert && (
+          <div className="logoutSuccessMessageContainer">
+            <h3>You have been successfully logged out !!!</h3>
+          </div>    
+        )}
       </div>
     </div>
   );

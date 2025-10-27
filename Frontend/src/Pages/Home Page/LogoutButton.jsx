@@ -1,25 +1,34 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const LogoutButton = ({onClick}) => {
+const LogoutButton = ({ onClick }) => {
   return (
     <StyledWrapper>
       <div>
         <button className="animated-button" onClick={onClick}>
-          <svg viewBox="0 0 24 24" className="arr-2" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            viewBox="0 0 24 24"
+            className="arr-2"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z" />
           </svg>
-          <span className="text">Logout </span>
+          <span className="text">Logout</span>
           <span className="circle" />
-          <svg viewBox="0 0 24 24" className="arr-1" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            viewBox="0 0 24 24"
+            className="arr-1"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z" />
           </svg>
         </button>
-        <br /><br />
+        <br />
+        <br />
       </div>
     </StyledWrapper>
   );
-}
+};
 
 const StyledWrapper = styled.div`
   .animated-button {
@@ -39,6 +48,7 @@ const StyledWrapper = styled.div`
     cursor: pointer;
     overflow: hidden;
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    margin-top: 2rem;
   }
 
   .animated-button svg {
@@ -108,6 +118,55 @@ const StyledWrapper = styled.div`
     width: 220px;
     height: 220px;
     opacity: 1;
-  }`;
+  }
+
+  /* Responsive Adjustment for small screens */
+  @media (max-width: 675px) {
+    .animated-button {
+      font-size: 13px;
+      padding: 12px 28px;
+    }
+
+    .animated-button svg {
+      width: 20px;
+    }
+  }
+  @media (max-width: 350px) {
+  .animated-button {
+    font-size: 11px;       
+    padding: 8px 16px;       /* more horizontal space for the arrow */
+    gap: 6px;                /* slightly increase space between text and arrow */
+  }
+
+  .animated-button svg {
+    width: 18px;             /* make arrows smaller */
+  }
+
+  .animated-button .text {
+    transform: translateX(-6px);  /* reduce initial left shift */
+  }
+
+  .animated-button:hover .text {
+    transform: translateX(6px);   /* reduce hover shift */
+  }
+
+  .animated-button .arr-1 {
+    right: 10px;              /* closer to text */
+  }
+
+  .animated-button .arr-2 {
+    left: -20%;               /* better alignment for entry arrow */
+  }
+
+  .animated-button:hover .arr-2 {
+    left: 10px;               /* reduced movement on hover */
+  }
+
+  .animated-button:hover .circle {
+    width: 160px;             /* smaller expanding circle for smaller screen */
+    height: 160px;
+  }
+}
+`;
 
 export default LogoutButton;

@@ -49,7 +49,6 @@ function HistoryPage() {
                                         <h3>Joined on : {new Date(meeting.meetingDate).toLocaleString("en-IN", {
                                             weekday: "short"
                                         })}, {new Date(meeting.meetingDate).toLocaleString("en-IN", {
-                                            month: "long",
                                             year: "numeric",
                                             hour12: true,
                                             day: 'numeric',
