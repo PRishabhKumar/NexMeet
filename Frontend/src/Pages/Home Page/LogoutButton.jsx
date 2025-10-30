@@ -35,6 +35,7 @@ const StyledWrapper = styled.div`
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 4px;
     padding: 16px 36px;
     border: 4px solid;
@@ -49,6 +50,8 @@ const StyledWrapper = styled.div`
     overflow: hidden;
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     margin-top: 2rem;
+    white-space: nowrap;
+    min-width: fit-content;
   }
 
   .animated-button svg {
@@ -57,6 +60,7 @@ const StyledWrapper = styled.div`
     fill: rgb(47, 255, 255);
     z-index: 9;
     transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    flex-shrink: 0;
   }
 
   .animated-button .arr-1 {
@@ -120,53 +124,182 @@ const StyledWrapper = styled.div`
     opacity: 1;
   }
 
-  /* Responsive Adjustment for small screens */
-  @media (max-width: 675px) {
+  /* Tablet and medium screens */
+  @media (max-width: 768px) {
     .animated-button {
-      font-size: 13px;
       padding: 12px 28px;
+      font-size: 14px;
+      margin-top: 1.5rem;
     }
 
     .animated-button svg {
       width: 20px;
     }
-  }
-  @media (max-width: 350px) {
-  .animated-button {
-    font-size: 11px;       
-    padding: 8px 16px;       /* more horizontal space for the arrow */
-    gap: 6px;                /* slightly increase space between text and arrow */
+
+    .animated-button .arr-1 {
+      right: 14px;
+    }
+
+    .animated-button:hover .arr-2 {
+      left: 14px;
+    }
+
+    .animated-button:hover .circle {
+      width: 180px;
+      height: 180px;
+    }
   }
 
-  .animated-button svg {
-    width: 18px;             /* make arrows smaller */
+  /* Specific fix for 412px width screens */
+  @media (max-width: 420px) {
+    .animated-button {
+      font-size: 12px;
+      padding: 10px 22px;
+      gap: 3px;
+      margin-top: 1.2rem;
+      border: 3px solid;
+    }
+
+    .animated-button svg {
+      width: 18px;
+    }
+
+    .animated-button .text {
+      transform: translateX(-8px);
+    }
+
+    .animated-button:hover .text {
+      transform: translateX(8px);
+    }
+
+    .animated-button .arr-1 {
+      right: 12px;
+    }
+
+    .animated-button:hover .arr-2 {
+      left: 12px;
+    }
+
+    .animated-button:hover .circle {
+      width: 150px;
+      height: 150px;
+    }
   }
 
-  .animated-button .text {
-    transform: translateX(-6px);  /* reduce initial left shift */
+  /* Specific fix for 344px width screens */
+  @media (max-width: 380px) {
+    .animated-button {
+      font-size: 10.5px;
+      padding: 8px 16px;
+      gap: 2px;
+      margin-top: 1rem;
+      border: 2.5px solid;
+    }
+
+    .animated-button svg {
+      width: 15px;
+    }
+
+    .animated-button .text {
+      transform: translateX(-5px);
+    }
+
+    .animated-button:hover .text {
+      transform: translateX(5px);
+    }
+
+    .animated-button .arr-1 {
+      right: 9px;
+    }
+
+    .animated-button .arr-2 {
+      left: -18%;
+    }
+
+    .animated-button:hover .arr-2 {
+      left: 9px;
+    }
+
+    .animated-button:hover .circle {
+      width: 120px;
+      height: 120px;
+    }
   }
 
-  .animated-button:hover .text {
-    transform: translateX(6px);   /* reduce hover shift */
+  /* Very small screens (320px and below) */
+  @media (max-width: 320px) {
+    .animated-button {
+      font-size: 10px;
+      padding: 8px 16px;
+      gap: 2px;
+      margin-top: 0.8rem;
+      border: 2px solid;
+    }
+
+    .animated-button svg {
+      width: 14px;
+    }
+
+    .animated-button .text {
+      transform: translateX(-5px);
+    }
+
+    .animated-button:hover .text {
+      transform: translateX(5px);
+    }
+
+    .animated-button .arr-1 {
+      right: 9px;
+    }
+
+    .animated-button .arr-2 {
+      left: -18%;
+    }
+
+    .animated-button:hover .arr-2 {
+      left: 9px;
+    }
+
+    .animated-button:hover .circle {
+      width: 110px;
+      height: 110px;
+    }
   }
 
-  .animated-button .arr-1 {
-    right: 10px;              /* closer to text */
+  /* Large screens */
+  @media (min-width: 1200px) {
+    .animated-button {
+      padding: 18px 40px;
+      font-size: 17px;
+    }
+
+    .animated-button svg {
+      width: 26px;
+    }
+
+    .animated-button:hover .circle {
+      width: 240px;
+      height: 240px;
+    }
   }
 
-  .animated-button .arr-2 {
-    left: -20%;               /* better alignment for entry arrow */
-  }
+  /* Extra large screens */
+  @media (min-width: 1600px) {
+    .animated-button {
+      padding: 20px 44px;
+      font-size: 18px;
+      margin-top: 2.5rem;
+    }
 
-  .animated-button:hover .arr-2 {
-    left: 10px;               /* reduced movement on hover */
-  }
+    .animated-button svg {
+      width: 28px;
+    }
 
-  .animated-button:hover .circle {
-    width: 160px;             /* smaller expanding circle for smaller screen */
-    height: 160px;
+    .animated-button:hover .circle {
+      width: 260px;
+      height: 260px;
+    }
   }
-}
 `;
 
 export default LogoutButton;

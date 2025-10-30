@@ -106,6 +106,30 @@ const SplitText = ({
 
   }, [text, delay, duration, ease, splitType, JSON.stringify(from), JSON.stringify(to), threshold, rootMargin, fontsLoaded, onLetterAnimationComplete]);
 
+  const getResponsiveFontSize = () => {
+    if (tag.startsWith('h')) {
+      // Responsive heading sizes
+      switch(tag) {
+        case 'h1':
+          return 'clamp(1.5rem, 4vw + 0.5rem, 3rem)';
+        case 'h2':
+          return 'clamp(1.25rem, 3.5vw + 0.5rem, 2.5rem)';
+        case 'h3':
+          return 'clamp(1.1rem, 3vw + 0.5rem, 2rem)';
+        case 'h4':
+          return 'clamp(1rem, 2.5vw + 0.5rem, 1.75rem)';
+        case 'h5':
+          return 'clamp(0.9rem, 2vw + 0.5rem, 1.5rem)';
+        case 'h6':
+          return 'clamp(0.85rem, 1.5vw + 0.5rem, 1.25rem)';
+        default:
+          return 'clamp(1.5rem, 4vw + 0.5rem, 3rem)';
+      }
+    }
+    // Responsive paragraph size
+    return 'clamp(1rem, 2vw + 0.5rem, 2rem)';
+  };
+
   const renderTag = () => {
     const style = {
       textAlign,
@@ -114,9 +138,14 @@ const SplitText = ({
       whiteSpace: 'normal',
       wordWrap: 'break-word',
       willChange: 'transform, opacity',
-      fontSize: tag.startsWith('h') ? '3rem' : '2rem' // Increased font size here
+      fontSize: getResponsiveFontSize(),
+      lineHeight: '1.4',
+      padding: '0 clamp(0.5rem, 2vw, 1rem)',
+      maxWidth: '100%',
+      boxSizing: 'border-box'
     };
     const classes = `split-parent ${className}`;
+    
     switch (tag) {
       case 'h1': return <h1 ref={ref} style={style} className={classes}>{text}</h1>;
       case 'h2': return <h2 ref={ref} style={style} className={classes}>{text}</h2>;
