@@ -19,7 +19,7 @@ const app = express();
 const server = createServer(app); // Wrap the app into an HTTP server
 const ioServer = ConnectToSocket(server);
 
-app.set("port", 3000) // Set the apps port number
+app.set("port", process.env.PORT || 3000) // Set the apps port number
 // Configuring middlewares
 
 app.use(cors())
@@ -38,12 +38,14 @@ const startServer = async()=>{
     })
 }
 
-startServer() 
 
 // Get the basic home route
 
 app.get("/", (req, res)=>{
     res.send("This is the home route")
 })
+
+
+startServer() 
 
 
