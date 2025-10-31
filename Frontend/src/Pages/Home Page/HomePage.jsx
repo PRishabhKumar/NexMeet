@@ -4,7 +4,6 @@ import LogoutButton from "./LogoutButton";
 import {useNavigate} from 'react-router-dom'
 import { useContext } from "react";
 import { AuthContext } from "../../Contexts/AuthContext";
-import {toast, Toaster} from 'react-hot-toast'
 import { useState } from "react";
 import WithAuth from "../../Utils/WithAuth";
 import axios from "axios";
