@@ -1,6 +1,6 @@
 let IS_PROD = false;
 const server = IS_PROD ?
-    "https://apnacollegebackend.onrender.com" :
+    "https://nexmeet-1-lkmd.onrender.com" :
 
     "http://localhost:3000"
 
