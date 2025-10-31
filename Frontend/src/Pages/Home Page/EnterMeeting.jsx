@@ -16,9 +16,17 @@ function EnterMeeting() {
                     username : username,
                     meetingDate : Date.now()
                 }
-                await axios.post(`http://localhost:3000/api/v1/users/add_activity/${username}`, meetingDetails) // this adds the meeting to the db as soon as the user joins
-                console.log("Meeting added successfully to the database...")
-                router(`/${roomName}`)
+                let roomExists = await axios.get(`http://localhost:3000/api/v1/users/searchMeetings/${roomName}`)
+                if(roomExists.success){
+                    await axios.post(`http://localhost:3000/api/v1/users/add_activity/${username}`, meetingDetails) // this adds the meeting to the db as soon as the user joins
+                    console.log("Meeting added successfully to the database...")
+                    router(`/${roomName}`)
+                }
+                else{
+                    alert(`The entered meeting room does not exist....`)
+                    router('/home') // redirect them back to the home page only if the meeting does not exist
+                }
+                
             }
             else{
                 alert("Please enter a valid room number/ID")

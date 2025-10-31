@@ -102,4 +102,22 @@ const findUserMeetings = async(req, res)=>{
     }
 }
 
-export {registerUser, authenticateUser, addUserMeeting, findUserMeetings}
+// Function tosearch if the given meeting room exists
+
+const searchMeetings = async(req, res)=>{
+    try{
+        let roomName = req.params.roomName;
+        const room = await MeetingModel.find({roomName})
+        if(room){
+            res.status(200).json({message : "This meeting room exists.", success : true})
+        }
+        else{
+            res.status(200).json({message : "This meeting room does not exist", success : false})
+        }
+    }
+    catch(e){
+        console.log(`This error occured while searching for this meeting room : ${e}`)
+    }
+}
+
+export {registerUser, authenticateUser, addUserMeeting, findUserMeetings, searchMeetings}
