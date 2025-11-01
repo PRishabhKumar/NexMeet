@@ -12,7 +12,8 @@ const PORT = process.env.PORT || 10000;
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Handle React routing - return index.html for all routes
-app.get('/*', (req, res) => {
+// Using middleware approach for Express v5 compatibility
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
