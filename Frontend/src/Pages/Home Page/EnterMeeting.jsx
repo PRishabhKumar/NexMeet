@@ -3,6 +3,7 @@ import JoinMeetingButton from "./JoinMeetingButton"
 import { useNavigate } from "react-router-dom"
 import {useState} from 'react'
 import axios from "axios"
+import server from '../../environment'
 
 function EnterMeeting() {
     const [roomName, setRoomName] = useState('')
@@ -16,9 +17,9 @@ function EnterMeeting() {
                     username : username,
                     meetingDate : Date.now()
                 }
-                let roomExists = await axios.get(`http://localhost:3000/api/v1/users/searchMeetings/${roomName}`)
+                let roomExists = await axios.get(`${server}/api/v1/users/searchMeetings/${roomName}`)
                 if(roomExists.success){
-                    await axios.post(`http://localhost:3000/api/v1/users/add_activity/${username}`, meetingDetails) // this adds the meeting to the db as soon as the user joins
+                    await axios.post(`${server}/api/v1/users/add_activity/${username}`, meetingDetails) // this adds the meeting to the db as soon as the user joins
                     console.log("Meeting added successfully to the database...")
                     router(`/${roomName}`)
                 }

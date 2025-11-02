@@ -7,6 +7,7 @@ import { AuthContext } from "../../Contexts/AuthContext";
 import { useState } from "react";
 import WithAuth from "../../Utils/WithAuth";
 import axios from "axios";
+import server from '../../environment'
 
 function HomePage() {
   const {handleLogout, userData} = useContext(AuthContext)
@@ -60,7 +61,7 @@ function HomePage() {
     else{
       console.log('Start meeting clicked');
       let roomName = generateRoomName()
-      await axios.post(`http://localhost:3000/api/v1/users/add_activity/${username}`, {
+      await axios.post(`${server}/api/v1/users/add_activity/${username}`, {
         meetingID: roomName,
         meetingDate: Date.now()
       })
