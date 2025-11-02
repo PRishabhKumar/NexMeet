@@ -2,6 +2,7 @@ import "./Styles/HistoryStyles.css"
 import axios from "axios"
 import {useState, useEffect} from 'react'
 import { useNavigate } from "react-router-dom"
+import server from "../../environment"
 
 function HistoryPage() { 
     const router = useNavigate()
@@ -20,7 +21,7 @@ function HistoryPage() {
         const getMeetings = async() => {
             try {
                 console.log("Fetching meetings for username:", storedUsername) // Debug log
-                const result = await axios.get(`http://localhost:3000/api/v1/users/get_activities/${storedUsername}`)
+                const result = await axios.get(`${server}/api/v1/users/get_activities/${storedUsername}`)
                 setMeetings(result.data.meetings)
                 console.log("Meeting details fetched successfully!")
             } catch(e) {
