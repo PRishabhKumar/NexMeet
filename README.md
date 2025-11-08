@@ -2,7 +2,7 @@
 
 ### 🚀 A Modern MERN Stack Video Conferencing Platform with Real-Time Chat & Screen Sharing
 
-[![Render Deployment](https://img.shields.io/badge/Deployed%20on-Render-blue?logo=render)](https://nexmeet-backend-lio2.onrender.com)
+[![Render Deployment](https://img.shields.io/badge/Deployed%20on-Render-blue?logo=render)](https://nexmeet-calling-platform-dmng.onrender.com)
 [![GitHub Repo](https://img.shields.io/badge/View%20on-GitHub-black?logo=github)](https://github.com/PRishabhKumar/NexMeet)
 [![Tech Stack](https://img.shields.io/badge/Stack-MERN-green)](https://github.com/PRishabhKumar/NexMeet)
 
