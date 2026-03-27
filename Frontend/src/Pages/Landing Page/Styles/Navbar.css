@@ -1,543 +1,147 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;    
-}
-
-/* Navbar container pinned to top */
-.navbar-container {
+.ethereal-nav-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 0.5rem 2rem;
+    padding: 1rem 2rem;
     z-index: 1000;
+    display: flex;
+    justify-content: center;
     pointer-events: none;
 }
 
-/* Remove Bootstrap's default background and border */
-.custom-navbar {
-    background: transparent !important;
-    box-shadow: none !important;
-}
-
-/* Force navbar items to stay on one line */
-.navbar-nav {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    flex-direction: row !important;
-}
-
-.navbar-collapse {
-    flex-wrap: nowrap !important;
-}
-
-.container-fluid {
-    flex-wrap: nowrap !important;
-}
-
-/* Heading styles */
-.heading {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 0;
-    color: white;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-/* Nav link styles */
-.navbar-nav .nav-link {
-    height: fit-content;
-    width: fit-content;    
-    padding: 0 1rem 0 1rem;
-    margin: 0.5rem;
-    border-radius: 0.5rem;
-    font-size: 1.5rem;
-    margin-left: 2rem;
-    color: white !important;
-    transition: all 0.3s ease-in-out;
+.ethereal-nav-glass {
+    width: 100%;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 1);
+    border-radius: 100px;
     display: flex;
-    gap: 1rem;
-    pointer-events: auto !important;
-    white-space: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+    pointer-events: auto;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0,0,0,0.02);
 }
 
-.navbar-nav .nav-link:hover {
-    color: white;
-    text-shadow: 
-        0 0 1.5rem orange,
-        0 0 2rem orange,
-        0 0 2.5rem orange,
-        0 0 3rem orange,
-        0 0 3.5rem orange,
-        0 0 4rem orange,
-        0 0 4.5rem orange,
-        0 0 5rem orange;
-    transform: scale(1.05);
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
 }
 
-.navbar-nav{
-    margin-right: 2.5rem;
+.brand-dot {
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(135deg, #0066CC, #5AC8FA);
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(90, 200, 250, 0.6);
 }
 
-.loginButton{
-    margin-top: 0.5rem;
-    padding: 0 1.5rem 0 1.5rem !important;
-    height: fit-content;
-    width: fit-content;
-    background-color: orange;
-    border-radius: 0.5rem;
-    color: white !important;
-    transition: all 0.3s ease-in-out;
+.nav-brand span {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #000000;
+    letter-spacing: -0.5px;
 }
 
-.loginButton:hover{
-    color: orange !important;
-    background-color: white !important;
-    transform: scale(1.05);
-    text-shadow: none !important;
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
 }
 
-/* ====================================
-   RESPONSIVE DESIGN STARTS HERE
-   MOBILE-FIRST APPROACH FOR NAVBAR
-   ==================================== */
-
-/* Large Desktops (1400px+) */
-@media screen and (min-width: 1400px) {
-    .navbar-container {
-        padding: 0.75rem 3rem !important;
-    }
-
-    .heading {
-        font-size: 2.75rem !important;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 1.6rem !important;
-        margin-left: 2.5rem !important;
-    }
+.menu-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333333;
+    text-decoration: none;
+    position: relative;
+    padding: 4px 8px;
+    transition: color 0.3s ease;
 }
 
-/* Standard Desktops (1200px - 1399px) */
-@media screen and (max-width: 1399px) {
-    .navbar-container {
-        padding: 0.5rem 2rem !important;
-    }
-
-    .heading {
-        font-size: 2.3rem !important;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 1.4rem !important;
-        margin-left: 1.75rem !important;
-        padding: 0 0.9rem !important;
-    }
-
-    .navbar-nav {
-        margin-right: 2rem !important;
-    }
+.menu-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #000000;
+    transform-origin: bottom right;
+    transition: transform 0.3s cubic-bezier(0.86, 0, 0.07, 1);
 }
 
-/* Tablets Landscape & Small Desktops (992px - 1199px) */
-@media screen and (max-width: 1199px) {
-    .navbar-container {
-        padding: 0.5rem 1.5rem !important;
-    }
-
-    .heading {
-        font-size: 2rem !important;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 1.25rem !important;
-        margin-left: 1.5rem !important;
-        padding: 0 0.8rem !important;
-        margin: 0.4rem !important;
-    }
-
-    .navbar-nav {
-        margin-right: 1.5rem !important;
-        flex-wrap: nowrap !important;
-    }
-
-    .loginButton {
-        padding: 0 1.25rem !important;
-        margin-top: 0.4rem !important;
-    }
+.menu-link:hover {
+    color: #000000;
 }
 
-/* Critical fix for 996px onwards - prevent wrapping */
-@media screen and (max-width: 996px) {
-    .navbar-container {
-        padding: 0.4rem 1rem !important;
-    }
-
-    .heading {
-        font-size: 1.8rem !important;
-    }
-
-    .navbar-nav {
-        flex-wrap: nowrap !important;
-        gap: 0 !important;
-        margin-right: 1rem !important;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 1.15rem !important;
-        margin-left: 1rem !important;
-        padding: 0 0.7rem !important;
-        margin: 0.35rem !important;
-        flex-shrink: 0 !important;
-    }
-
-    .loginButton {
-        padding: 0 1.1rem !important;
-        margin-top: 0.35rem !important;
-        flex-shrink: 0 !important;
-    }
+.menu-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
 }
 
-/* Tablets Portrait (768px - 991px) */
-@media screen and (max-width: 991px) {
-    .navbar-container {
-        padding: 0.4rem 0.8rem !important;
-    }
-
-    .heading {
-        font-size: 1.65rem !important;
-    }
-
-    .navbar-nav {
-        flex-wrap: nowrap !important;
-        margin-right: 0.8rem !important;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 1.05rem !important;
-        margin-left: 0.8rem !important;
-        padding: 0 0.6rem !important;
-        margin: 0.3rem !important;
-        flex-shrink: 0 !important;
-    }
-
-    .loginButton {
-        padding: 0 0.95rem !important;
-        margin-top: 0.3rem !important;
-        flex-shrink: 0 !important;
-    }
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
-/* Large Mobile & Small Tablets (576px - 767px) */
-@media screen and (max-width: 767px) {
-    .navbar-container {
-        padding: 0.35rem 0.6rem !important;
-    }
-
-    .heading {
-        font-size: 1.4rem !important;
-    }
-
-    .navbar-nav {
-        flex-wrap: nowrap !important;
-        margin-right: 0.6rem !important;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 0.9rem !important;
-        margin-left: 0.6rem !important;
-        padding: 0 0.5rem !important;
-        margin: 0.25rem !important;
-        gap: 0.4rem !important;
-        flex-shrink: 0 !important;
-    }
-
-    .loginButton {
-        padding: 0 0.85rem !important;
-        margin-top: 0.25rem !important;
-        border-radius: 0.4rem !important;
-        flex-shrink: 0 !important;
-    }
-
-    /* Reduce text shadow intensity on smaller screens */
-    .navbar-nav .nav-link:hover {
-        text-shadow: 
-            0 0 1rem orange,
-            0 0 1.5rem orange,
-            0 0 2rem orange;
-    }
+.link-ghost {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #000000;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 6px 12px;
+    border-radius: 8px;
 }
 
-/* Mobile Portrait (481px - 575px) */
-@media screen and (max-width: 575px) {
-    .navbar-container {
-        padding: 0.3rem 0.5rem !important;
-    }
-
-    .heading {
-        font-size: 1.2rem !important;
-    }
-
-    .navbar-nav {
-        flex-wrap: nowrap !important;
-        margin-right: 0.5rem !important;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 0.8rem !important;
-        margin-left: 0.5rem !important;
-        padding: 0 0.45rem !important;
-        margin: 0.2rem !important;
-        gap: 0.3rem !important;
-        flex-shrink: 0 !important;
-    }
-
-    .loginButton {
-        padding: 0 0.75rem !important;
-        margin-top: 0.2rem !important;
-        border-radius: 0.35rem !important;
-        flex-shrink: 0 !important;
-    }
-
-    /* Further reduce hover effects */
-    .navbar-nav .nav-link:hover {
-        text-shadow: 
-            0 0 0.75rem orange,
-            0 0 1.25rem orange;
-        transform: scale(1.03);
-    }
-
-    .loginButton:hover {
-        transform: scale(1.03);
-    }
+.link-ghost:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
 }
 
-/* Small Mobile Devices (376px - 480px) */
-@media screen and (max-width: 480px) {
-    .navbar-container {
-        padding: 0.25rem 0.4rem !important;
-    }
-
-    .heading {
-        font-size: 1.05rem !important;
-    }
-
-    .navbar-nav {
-        flex-wrap: nowrap !important;
-        margin-right: 0.4rem !important;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 0.72rem !important;
-        margin-left: 0.4rem !important;
-        padding: 0 0.4rem !important;
-        margin: 0.15rem !important;
-        gap: 0.25rem !important;
-        flex-shrink: 0 !important;
-    }
-
-    .loginButton {
-        padding: 0 0.65rem !important;
-        margin-top: 0.15rem !important;
-        border-radius: 0.3rem !important;
-        flex-shrink: 0 !important;
-    }
+.btn-pill {
+    background: #000000;
+    color: #FFFFFF;
+    padding: 0.7rem 1.6rem;
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Extra Small Mobile (320px - 375px) */
-@media screen and (max-width: 375px) {
-    .navbar-container {
-        padding: 0.2rem 0.35rem !important;
-    }
-
-    .heading {
-        font-size: 0.95rem !important;
-    }
-
-    .navbar-nav {
-        flex-wrap: nowrap !important;
-        margin-right: 0.35rem !important;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 0.65rem !important;
-        margin-left: 0.35rem !important;
-        padding: 0 0.35rem !important;
-        margin: 0.12rem !important;
-        gap: 0.2rem !important;
-        flex-shrink: 0 !important;
-    }
-
-    .loginButton {
-        padding: 0 0.55rem !important;
-        margin-top: 0.12rem !important;
-        border-radius: 0.25rem !important;
-        flex-shrink: 0 !important;
-    }
-
-    /* Minimal hover effects on very small screens */
-    .navbar-nav .nav-link:hover {
-        text-shadow: 0 0 0.5rem orange;
-        transform: scale(1.02);
-    }
-
-    .loginButton:hover {
-        transform: scale(1.02);
-    }
+.btn-pill:hover {
+    background: #222222;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Ultra Small Mobile (max-width: 320px) */
-@media screen and (max-width: 320px) {
-    .navbar-container {
-        padding: 0.15rem 0.3rem !important;
-    }
-
-    .heading {
-        font-size: 0.85rem !important;
-    }
-
-    .navbar-nav {
-        flex-wrap: nowrap !important;
-        margin-right: 0.3rem !important;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 0.6rem !important;
-        margin-left: 0.3rem !important;
-        padding: 0 0.3rem !important;
-        margin: 0.1rem !important;
-        gap: 0.15rem !important;
-        flex-shrink: 0 !important;
-    }
-
-    .loginButton {
-        padding: 0 0.5rem !important;
-        margin-top: 0.1rem !important;
-        border-radius: 0.2rem !important;
-        flex-shrink: 0 !important;
-    }
+.btn-pill:active {
+    transform: translateY(0) scale(0.98);
 }
 
-/* Landscape Orientation on Mobile Devices */
-@media screen and (max-height: 500px) and (orientation: landscape) {
-    .navbar-container {
-        padding: 0.3rem 1rem !important;
+/* Responsive */
+@media (max-width: 768px) {
+    .ethereal-nav-container {
+        padding: 1rem;
     }
-
-    .heading {
-        font-size: 1.25rem !important;
+    
+    .nav-menu, .link-ghost {
+        display: none;
     }
-
-    .navbar-nav .nav-link {
-        font-size: 0.8rem !important;
-        margin-left: 0.75rem !important;
-        padding: 0 0.5rem !important;
-        margin: 0.2rem !important;
-    }
-
-    .navbar-nav {
-        margin-right: 0.75rem !important;
-    }
-
-    .loginButton {
-        padding: 0 0.8rem !important;
-        margin-top: 0.2rem !important;
-    }
-}
-
-/* Very Small Landscape (iPhone SE landscape, etc.) */
-@media screen and (max-height: 400px) and (orientation: landscape) {
-    .navbar-container {
-        padding: 0.2rem 0.75rem !important;
-    }
-
-    .heading {
-        font-size: 1.1rem !important;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 0.7rem !important;
-        margin-left: 0.6rem !important;
-        padding: 0 0.4rem !important;
-        margin: 0.15rem !important;
-    }
-
-    .navbar-nav {
-        margin-right: 0.6rem !important;
-    }
-
-    .loginButton {
-        padding: 0 0.7rem !important;
-        margin-top: 0.15rem !important;
-    }
-}
-
-/* Touch Device Optimizations */
-@media (hover: none) and (pointer: coarse) {
-    /* Ensure touch targets are adequate (minimum 44x44px) */
-    .navbar-nav .nav-link {
-        min-height: 44px !important;
-        display: flex !important;
-        align-items: center !important;
-    }
-
-    .loginButton {
-        min-height: 44px !important;
-        display: flex !important;
-        align-items: center !important;
-    }
-
-    /* Remove hover effects on touch devices, use active state instead */
-    .navbar-nav .nav-link:hover {
-        text-shadow: none;
-        transform: none;
-    }
-
-    .navbar-nav .nav-link:active {
-        text-shadow: 0 0 1rem orange;
-        transform: scale(0.98);
-    }
-
-    .loginButton:hover {
-        color: white !important;
-        background-color: orange !important;
-        transform: none;
-    }
-
-    .loginButton:active {
-        color: orange !important;
-        background-color: white !important;
-        transform: scale(0.98);
-    }
-}
-
-/* Reduced Motion Preference */
-@media (prefers-reduced-motion: reduce) {
-    .navbar-nav .nav-link,
-    .loginButton {
-        transition: none !important;
-    }
-
-    .navbar-nav .nav-link:hover,
-    .loginButton:hover {
-        transform: none !important;
-    }
-}
-
-/* High Contrast Mode */
-@media (prefers-contrast: high) {
-    .navbar-nav .nav-link {
-        border: 1px solid white !important;
-    }
-
-    .loginButton {
-        border: 2px solid white !important;
-    }
-
-    .heading {
-        text-shadow: 0 0 2px black !important;
-    }
-}
+}
