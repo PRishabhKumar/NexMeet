@@ -1,847 +1,450 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --zenith-bg: #030303;
+    --zenith-primary: #0066CC;
+    --zenith-accent: #5AC8FA;
+    --zenith-text-primary: #ffffff;
+    --zenith-text-secondary: #94a3b8;
+    --zenith-glass: rgba(10, 10, 18, 0.45);
+    --zenith-border: rgba(255, 255, 255, 0.08);
+    --zenith-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    --transition-zenith: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;  
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background: #000000;
-  color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--zenith-bg);
+    color: var(--zenith-text-primary);
+    overflow: hidden;
 }
 
-.headingWrapper{
-    padding: 0.5rem;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    margin-bottom: 1rem; /* Reduced from 2rem */
-    border-radius: 2rem;
-    flex-shrink: 0; /* Prevent shrinking */
-}
-
-.auth-container {
-    position: fixed;
-    top: 0;
-    left: 0;
+/* Base Layout */
+.auth-zenith-root {
+    position: relative;
     width: 100vw;
     height: 100vh;
+    background: var(--zenith-bg);
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    justify-content: flex-start; /* Changed from center to flex-start */
-    padding: 1rem; /* Reduced padding */
-    overflow-y: auto; /* Enable vertical scrolling */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    /* Modern video conferencing background with technology theme */
-    background: 
-        linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.75) 50%, rgba(15, 23, 42, 0.85) 100%),
-        url('https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') center center;
-    background-size: cover;
-    background-repeat: no-repeat;    
-    background-attachment: fixed;
 }
 
-/* Add a container to ensure proper scrolling behavior */
-.auth-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    min-height: 100%;
-    padding-bottom: 2rem; /* Add bottom padding for safety */
-}
-
-/* Add subtle animated overlay for tech ambiance */
-.auth-container::before {
-    content: '';
+/* Zenith Atmospheric Background */
+.zenith-bg {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(217, 70, 239, 0.05) 0%, transparent 50%);
-    animation: techGlow 8s ease-in-out infinite alternate;
+    inset: 0;
+    z-index: 0;
+}
+
+.aurora {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.18;
+    mix-blend-mode: screen;
+    animation: zenithFloat 35s infinite alternate ease-in-out;
+}
+
+.aurora-1 {
+    width: 80vw;
+    height: 60vh;
+    background: radial-gradient(circle, var(--zenith-primary) 0%, transparent 70%);
+    top: -20%;
+    left: -10%;
+}
+
+.aurora-2 {
+    width: 70vw;
+    height: 70vh;
+    background: radial-gradient(circle, var(--zenith-accent) 0%, transparent 70%);
+    bottom: -10%;
+    right: -10%;
+    animation-delay: -8s;
+}
+
+.aurora-3 {
+    width: 50vw;
+    height: 50vh;
+    background: radial-gradient(circle, #ffffff 0%, transparent 70%);
+    top: 35%;
+    left: 25%;
+    opacity: 0.04;
+    animation-duration: 45s;
+}
+
+.grain-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: var(--zenith-noise);
+    opacity: 0.04;
     pointer-events: none;
-    z-index: 1;
+    z-index: 2;
 }
 
-@keyframes techGlow {
-    0% { opacity: 0.6; }
-    100% { opacity: 1; }
+@keyframes zenithFloat {
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    100% { transform: translate(80px, 40px) scale(1.1) rotate(5deg); }
 }
 
-.auth-wrapper {
+/* Scroller & Layout Container */
+.zenith-content-scroller {
+    position: relative;
+    z-index: 10;
     width: 100%;
-    max-width: 420px;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    padding: 3.5rem 1.5rem;
+}
+
+.zenith-form-stack {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3.5rem;
+    margin: auto 0;
+}
+
+/* Zenith Heading Typography (Synced with Landing Page) */
+.zenith-heading {
+    width: 100%;
+    text-align: center;
+}
+
+.zenith-title-proxy {
+    position: relative;
+    width: 100%;
+}
+
+.zenith-proximity-label {
+    font-family: 'Outfit', sans-serif !important;
+    font-size: clamp(3.2rem, 11vw, 4.8rem) !important;
+    font-weight: 900 !important;
+    letter-spacing: -3.5px !important;
+    color: var(--zenith-text-primary) !important;
+    line-height: 0.9 !important;
+    filter: drop-shadow(0 0 20px rgba(255,255,255,0.1));
+}
+
+/* Dynamic Feedback Badges */
+.zenith-alert-host {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    animation: badgePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.zenith-alert-badge {
+    padding: 0.8rem 2rem;
+    border-radius: 60px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.zenith-alert-badge.success { background: rgba(0, 102, 204, 0.15); color: var(--zenith-accent); }
+.zenith-alert-badge.error { background: rgba(255, 59, 48, 0.15); color: #FF3B30; }
+
+.alert-shimmer {
+    position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    animation: shimmer 2.5s infinite;
+}
+
+@keyframes shimmer { 100% { left: 100%; } }
+@keyframes badgePop { from { opacity: 0; transform: scale(0.9) translateY(12px); } }
+
+/* The Zenith Obsidian Card */
+.zenith-card {
+    width: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+.zenith-card-inner {
+    background: var(--zenith-glass);
+    backdrop-filter: blur(45px) saturate(1.8);
+    -webkit-backdrop-filter: blur(45px) saturate(1.8);
+    border: 1px solid var(--zenith-border);
+    border-radius: 3rem;
+    padding: 3.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 50px 120px -30px rgba(0, 0, 0, 0.95),
+        inset 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Border Beam Effect: Synced Blue */
+.border-beam {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: 3rem;
+    padding: 1.5px;
+    background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, var(--zenith-primary) 30deg, transparent 60deg);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    display: block;
+    animation: beamRotate 4s linear infinite;
+}
+
+@keyframes beamRotate {
+    0% { transform: scale(1); filter: hue-rotate(0deg); }
+    100% { transform: scale(1); filter: hue-rotate(360deg); }
+}
+
+/* Tab Navigation Glider: Magnetic Feel */
+.zenith-tabs {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 1.5rem;
+    padding: 0.5rem;
+    margin-bottom: 3.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.zenith-tab {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--zenith-text-secondary);
+    padding: 1.1rem;
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
     position: relative;
     z-index: 2;
-    margin: 1rem auto; /* Add top and bottom margin */
-    padding: 1rem;
+    transition: var(--transition-zenith);
+}
+
+.zenith-tab.active { color: white; }
+
+.zenith-tab-glider {
+    position: absolute;
+    top: 0.5rem; left: 0.5rem;
+    width: calc(50% - 0.5rem);
+    height: calc(100% - 1rem);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 1.1rem;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.zenith-tab-glider.state-1 { transform: translateX(100%); }
+
+/* Zenith Input Shell: Obsidian Precision */
+.zenith-fields-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.zenith-field-wrap {
+    width: 100%;
+    animation: fieldReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fieldReveal {
+    from { opacity: 0; transform: translateY(25px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.staggered-1 { animation-delay: 0.15s; }
+.staggered-2 { animation-delay: 0.25s; }
+.staggered-3 { animation-delay: 0.35s; }
+.staggered-4 { animation-delay: 0.45s; }
+
+.zenith-input-shell {
+    position: relative;
+    width: 100%;
+}
+
+.zenith-input {
+    width: 100%;
+    padding: 1.5rem 1.6rem 0.85rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--zenith-border);
     border-radius: 1.5rem;
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: white;
+    font-size: 1.05rem;
+    font-family: inherit;
+    outline: none;
+    transition: var(--transition-zenith);
+}
+
+.zenith-label {
+    position: absolute;
+    left: 1.6rem;
+    top: 1.25rem;
+    color: var(--zenith-text-secondary);
+    font-size: 1.05rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    font-weight: 500;
+}
+
+/* Floating Label Logic: Blue Highlighting */
+.zenith-input:focus ~ .zenith-label,
+.zenith-input:not(:placeholder-shown) ~ .zenith-label {
+    top: 0.5rem;
+    left: 1.6rem;
+    font-size: 0.8rem;
+    color: var(--zenith-accent);
+    font-weight: 800;
+}
+
+.zenith-input:focus {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(0, 102, 204, 0.4);
+    box-shadow: 0 0 40px rgba(0, 102, 204, 0.1);
+}
+
+.zenith-focus-light {
+    position: absolute;
+    bottom: -1px; left: 1.6rem; right: 1.6rem;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, var(--zenith-accent), transparent);
+    opacity: 0;
+    transition: 0.5s;
+    filter: blur(1px);
+}
+
+.zenith-input:focus ~ .zenith-focus-light { opacity: 1; }
+
+/* Visibility Eye Toggle */
+.zenith-eye-toggle {
+    position: absolute;
+    right: 1.5rem; top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--zenith-text-secondary);
+    cursor: pointer;
+    width: 2.8rem; height: 2.8rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: var(--transition-zenith);
+    z-index: 5;
+}
+
+.zenith-eye-toggle:hover { color: white; transform: translateY(-50%) scale(1.1); }
+.zenith-eye-toggle svg { width: 1.4rem; stroke-width: 1.5; }
+
+/* Submit Section Zenith: Custom Obsidian Beam Button */
+.zenith-action {
+    margin-top: 2.25rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.zenith-submit {
+    position: relative;
+    width: 100%;
+    padding: 1.15rem;
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    /* Move overflow: hidden away if using outside glows, but beam needs it */
+    overflow: hidden; 
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 
-        0 25px 50px -12px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    /* Ensure it doesn't get cut off */
-    min-height: fit-content;
+        0 4px 20px rgba(0, 0, 0, 0.5),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    /* Prevent layout shifts */
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.zenith-submit:hover {
+    transform: scale(1.02); /* Simplified transform to prevent jitter */
+    border-color: var(--zenith-primary);
+    box-shadow: 
+        0 0 0 1px var(--zenith-primary),
+        0 15px 45px rgba(0, 102, 204, 0.4),
+        0 0 20px rgba(0, 102, 204, 0.2);
 }
 
-.auth-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 4rem;
-  height: 4rem;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
-  border-radius: 1.25rem;
-  margin-bottom: 1.5rem;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 
-    0 20px 40px -12px rgba(99, 102, 241, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-  animation: logoFloat 3s ease-in-out infinite alternate;
-}
-
-@keyframes logoFloat {
-  0% { transform: translateY(0px) rotate(0deg); }
-  100% { transform: translateY(-5px) rotate(2deg); }
-}
-
-.auth-logo::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  animation: shimmer 2s linear infinite;
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-}
-
-.logo-inner {
-  width: 2rem;
-  height: 2rem;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 0.625rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
-}
-
-.logo-dot {
-  width: 0.75rem;
-  height: 0.75rem;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  border-radius: 50%;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-}
-
-.auth-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #f8fafc;  
-  background: linear-gradient(135deg, #f8fafc, #cbd5e1);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: textGlow 3s ease-in-out infinite alternate;
-}
-
-@keyframes textGlow {
-  0% { text-shadow: 0 0 20px rgba(248, 250, 252, 0.3); }
-  100% { text-shadow: 0 0 30px rgba(248, 250, 252, 0.5); }
-}
-
-.auth-subtitle {
-  color: #94a3b8;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  animation: fadeIn 1s ease-out 0.3s both;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.form-container {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
-  backdrop-filter: blur(20px);
-  border-radius: 1.5rem;
-  padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.7),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  position: relative;
-  animation: slideInScale 0.8s ease-out 0.2s both;
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-}
-
-/* Add subtle tech-inspired pattern overlay */
-.form-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 25%),
-    radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 25%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.form-container > * {
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes slideInScale {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.form-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.auth-toggle {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: rgba(15, 23, 42, 0.9);
-  border-radius: 0.875rem;
-  padding: 0.25rem;
-  border: 1px solid rgba(71, 85, 105, 0.6);
-  margin-bottom: 1.5rem;
-  width: 100%;
-  max-width: 100%;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.toggle-btn {
-  position: relative;
-  z-index: 2;
-  padding: 0.875rem 1rem;
-  border: none;
-  background: transparent;
-  color: #94a3b8;
-  font-weight: 500;
-  font-size: 0.9rem;
-  border-radius: 0.625rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-origin: center;
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.toggle-btn:hover {
-  color: #f1f5f9;
-  transform: translateY(-1px);
-}
-
-.toggle-btn.active {
-  color: #ffffff;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
-
-.toggle-slider {
-  position: absolute;
-  top: 0.25rem;
-  left: 0.25rem;
-  width: calc(50% - 0.125rem);
-  height: calc(100% - 0.5rem);
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  border-radius: 0.625rem;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 
-    0 4px 12px rgba(99, 102, 241, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-  z-index: 1;
-}
-
-.toggle-slider.slide-right {
-  transform: translateX(100%);
-}
-
-.toggle-slider.slide-left {
-  transform: translateX(0%);
-}
-
-.form-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.form-field {
-  animation: slideInLeft 0.6s ease-out both;
-}
-
-.form-field:nth-child(1) { animation-delay: 0.1s; }
-.form-field:nth-child(2) { animation-delay: 0.2s; }
-.form-field:nth-child(3) { animation-delay: 0.3s; }
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.input-icon {
-  position: absolute;
-  left: 1rem;
-  width: 1.25rem;
-  height: 1.25rem;
-  color: #64748b;
-  z-index: 2;
-  transition: all 0.3s ease;
-}
-
-.form-input {
-  width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(71, 85, 105, 0.7);
-  border-radius: 0.875rem;
-  color: #f1f5f9;
-  font-size: 0.95rem;
-  outline: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(10px);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-.form-input::placeholder {
-  color: #64748b;
-  transition: all 0.3s ease;
-}
-
-.form-input:focus {
-  border-color: #6366f1;
-  box-shadow: 
-    0 0 0 3px rgba(99, 102, 241, 0.15),
-    0 4px 12px rgba(99, 102, 241, 0.2),
-    inset 0 1px 3px rgba(0, 0, 0, 0.1);
-  background: rgba(15, 23, 42, 0.85);
-  transform: translateY(-1px);
-}
-
-.form-input:focus::placeholder {
-  color: #94a3b8;
-  transform: translateX(5px);
-}
-
-.form-input:focus + .input-icon {
-  color: #6366f1;
-  transform: scale(1.1);
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 1rem;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
-  border: none;
-  border-radius: 0.875rem;
-  color: white;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 
-    0 10px 25px -8px rgba(99, 102, 241, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-  animation: slideInUp 0.6s ease-out 0.4s both;
-}
-
-/*Show password styles*/
-.password-toggle {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  color: #64748b;
-  transition: all 0.3s ease;
-}
-
-.password-toggle svg {
-  width: 1.25rem;
-  height: 1.25rem;
-  transition: all 0.3s ease;
-}
-
-.password-toggle:hover svg {
-  color: #6366f1;
-  transform: scale(1.1);
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.submit-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.submit-btn:hover::before {
-  left: 100%;
-}
-
-.submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 15px 35px -5px rgba(99, 102, 241, 0.6),
-    0 0 0 1px rgba(255, 255, 255, 0.15);
-}
-
-.submit-btn:active {
-  transform: translateY(0);
-}
-
-.btn-arrow {
-  width: 1.25rem;
-  height: 1.25rem;
-  transition: transform 0.3s ease;
-}
-
-.submit-btn:hover .btn-arrow {
-  transform: translateX(3px);
-}
-
-.social-section {
-  animation: fadeIn 1s ease-out 0.5s both;
-}
-
-.divider {
-  position: relative;
-  text-align: center;
-  margin: 1.5rem 0 1rem;
-}
-
-.divider::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(71, 85, 105, 0.7), transparent);
-}
-
-.divider span {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
-  padding: 0 1rem;
-  font-size: 0.875rem;
-  color: #94a3b8;
-  position: relative;
-  z-index: 1;
-}
-
-.social-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-}
-
-.social-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.875rem;
-  background: rgba(30, 41, 59, 0.7);
-  border: 1px solid rgba(71, 85, 105, 0.7);
-  border-radius: 0.75rem;
-  color: #e2e8f0;
-  font-weight: 500;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(10px);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.social-btn svg {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
-.social-btn:hover {
-  background: rgba(51, 65, 85, 0.85);
-  border-color: rgba(100, 116, 139, 0.9);
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 25px -8px rgba(0, 0, 0, 0.4),
-    inset 0 1px 2px rgba(255, 255, 255, 0.05);
-}
-
-/*************************************************** Styling for messages section ******************************************************************/
-
-/* Enhanced Message Container with Multiple Animation Options */
-
-/* Default animation: Smooth Slide with Bounce */
-.message-container {
-  position: fixed;
-  top: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 420px;
-  z-index: 9999;
-  text-align: center;
-  pointer-events: none;
-  animation: slideDownBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-.success-message, .error-message {
-  padding: 1rem 1.5rem;
-  border-radius: 1rem;
-  color: #fff;
-  font-weight: 600;
-  font-size: 1rem;
-  box-shadow: 
-    0 0.5rem 1rem rgba(0,0,0,0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-  animation: messageAppear 5s ease-out forwards;
-  backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Add a subtle shimmer effect */
-.success-message::before, .error-message::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: shimmer 1.5s ease-out 0.5s;
-}
-
-/* Success styling with pulse */
-.success-message {
-  background: linear-gradient(90deg, #00c853, #b9f6ca);
-  color: #004d40;
-  animation: messageAppear 5s ease-out forwards, successPulse 2s ease-in-out 0.5s;
-}
-
-/* Error styling with shake */
-.error-message {
-  background: linear-gradient(90deg, #d50000, #ff8a80);
-  color: #fff;
-  animation: messageAppear 5s ease-out forwards, errorShake 0.6s ease-in-out 0.2s;
-}
-
-/* Animation Keyframes */
-
-/* Enhanced slide down with bounce */
-@keyframes slideDownBounce {
-  0% {
-    transform: translate(-50%, -100%) scale(0.8);
-    opacity: 0;
-  }
-  60% {
-    transform: translate(-50%, 10px) scale(1.05);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, 0) scale(1);
-    opacity: 1;
-  }
-}
-
-/* Main message appearance with scale and fade */
-@keyframes messageAppear {
-  0% { 
-    opacity: 0; 
-    transform: scale(0.9);
-  }
-  10% { 
-    opacity: 1; 
-    transform: scale(1);
-  }
-  85% { 
-    opacity: 1; 
-    transform: scale(1);
-  }
-  95% {
-    opacity: 0.5;
+.zenith-submit:active {
     transform: scale(0.98);
-  }
-  100% { 
-    opacity: 0; 
-    transform: scale(0.95);
-  }
 }
 
-/* Success pulse effect */
-@keyframes successPulse {
-  0%, 100% { 
-    box-shadow: 
-      0 0.5rem 1rem rgba(0,0,0,0.3),
-      0 0 0 1px rgba(255, 255, 255, 0.1);
-  }
-  50% { 
-    box-shadow: 
-      0 0.5rem 1.5rem rgba(0, 200, 83, 0.4),
-      0 0 0 1px rgba(255, 255, 255, 0.2),
-      0 0 20px rgba(0, 200, 83, 0.3);
-  }
+.zenith-submit-text {
+    position: relative;
+    z-index: 5;
+    background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-/* Error shake effect */
-@keyframes errorShake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
-  20%, 40%, 60%, 80% { transform: translateX(3px); }
+/* Obsidian Beam Animation */
+.zenith-submit-beam {
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgba(0, 102, 204, 0.2), 
+        rgba(90, 200, 250, 0.3), 
+        rgba(0, 102, 204, 0.2), 
+        transparent
+    );
+    transform: skewX(-25deg);
+    transition: none;
+    pointer-events: none;
+    z-index: 2;
 }
 
-/************************************************************** Alternative animation options /*******************************************************/
-
-/* Set the left paramters for the following animations at once */
-.message-container.slide-rotate,
-.message-container.pop-elastic,
-.message-container.fade-grow {
-  left: 50%;      /* keep at center */
+.zenith-submit:hover .zenith-submit-beam {
+    animation: beamSweep 2s infinite;
 }
 
-/* Animation 2 */
-.message-container.slide-rotate {
-  animation: slideFromRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+@keyframes beamSweep {
+    0% { left: -120%; }
+    100% { left: 220%; }
 }
 
-@keyframes slideFromRight {
-  0% {
-    transform: translateX(-50%) translateY(-50px) rotate(15deg) scale(0.8);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(-50%) translateY(0) rotate(0deg) scale(1);
-    opacity: 1;
-  }
-}
+/* Scrollbar Zenith (Dark Edition) */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0, 102, 204, 0.1); border-radius: 10px; }
 
-/* Animation 3 */
-.message-container.pop-elastic {
-  animation: popElastic 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-}
-
-@keyframes popElastic {
-  0% {
-    transform: translateX(-50%) translateY(-100%) scale(0.3);
-    opacity: 0;
-  }
-  50% {
-    transform: translateX(-50%) translateY(-20px) scale(1.1);
-    opacity: 1;
-  }
-  70% {
-    transform: translateX(-50%) translateY(5px) scale(0.95);
-  }
-  100% {
-    transform: translateX(-50%) translateY(0) scale(1);
-    opacity: 1;
-  }
-}
-
-/* Animation 4 */
-.message-container.fade-grow {
-  animation: fadeGrow 0.6s ease-out forwards;
-}
-
-@keyframes fadeGrow {
-  0% {
-    transform: translateX(-50%) translateY(-50%) scale(0.5);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(-50%) translateY(0) scale(1);
-    opacity: 1;
-  }
-}
-
-/* Mobile optimizations */
-@media (max-width: 480px) {
-  .message-container {
-    width: 95%;
-    max-width: 350px;
-  }
-  
-  .success-message, .error-message {
-    padding: 0.875rem 1.25rem;
-    font-size: 0.9rem;
-  }
-  
-  /* Reduce bounce on mobile for better performance */
-  .message-container {
-    animation: slideDownBounce 0.6s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
-  }
-}
-
-/* Reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  .message-container {
-    animation: simpleSlideDown 0.3s ease-out forwards !important;
-  }
-  
-  .success-message, .error-message {
-    animation: simpleFade 4s ease-out forwards !important;
-  }
-  
-  .success-message::before, .error-message::before {
-    display: none;
-  }
-  
-  @keyframes simpleSlideDown {
-    0% {
-      transform: translate(-50%, -20px);
-      opacity: 0;
-    }
-    100% {
-      transform: translate(-50%, 0);
-      opacity: 1;
-    }
-  }
-  
-  @keyframes simpleFade {
-    0% { opacity: 0; }
-    10% { opacity: 1; }
-    85% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-}
-
-/************************************************** Media queries for responsive design **************************************************************/
-@media (max-width: 480px) {
-  .auth-container {
-    padding: 0.5rem;
-    background-attachment: scroll; /* Better performance on mobile */
-    justify-content: flex-start; /* Ensure top alignment on mobile */
-  }
-  
-  .auth-wrapper {
-    margin: 0.5rem auto;
-    max-width: 100%;
-  }
-  
-  .form-container {
-    padding: 1.5rem;
-  }
-  
-  .auth-title {
-    font-size: 1.75rem;
-  }
-  
-  .social-buttons {
-    grid-template-columns: 1fr;
-  }
-  
-  .toggle-btn {
-    font-size: 0.85rem;
-    padding: 0.75rem 0.5rem;
-  }
-  
-  /* Ensure form fields are properly spaced on mobile */
-  .form-fields {
-    gap: 1rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  
-  .auth-container::before {
-    animation: none;
-  }
+/* Mobile Optimizations */
+@media (max-width: 600px) {
+    .zenith-form-stack { gap: 3rem; }
+    .zenith-card-inner { padding: 2.5rem 2rem; border-radius: 2.5rem; }
+    .zenith-proximity-label { font-size: 3.2rem !important; }
 }

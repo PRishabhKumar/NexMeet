@@ -1,17 +1,9 @@
 import "./Styles/AuthStyle.css"
-import { useContext, useState } from 'react'
+import { useContext, useState, useRef } from 'react'
 import VariableProximity from "./Header/VariableProximity";
 import "./Styles/VariableProximity.css"
-import {useRef} from 'react'
-import { color } from "motion/react";
 import { AuthContext } from "../../Contexts/AuthContext.jsx";
-import httpStatus from "http-status"
-import {useNavigate} from 'react-router-dom'
-
-import Button from "./Submit Button/Button.jsx"
-
-
-
+import { useNavigate } from 'react-router-dom'
 
 function Auth() {
     const router = useNavigate()
@@ -22,224 +14,192 @@ function Auth() {
     const [formState, setFormState] = useState(0); // 0 is for login and 1 is for register
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
-    const [open, setOpen] = useState(0);
     const [showPassword, setShowPassword] = useState(false);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
         await handleAuthnetication();
-        console.log('Form submitted:', { username, name, password, formState });
     };
 
     const {handleRegister, handleLogin} = useContext(AuthContext)
 
     const handleAuthnetication = async ()=>{
         try{
-            setMessage('') // clear any messages or error from before
+            setMessage('')
             setError('')
-            // Register
+            
             if(formState === 1){
                 let result = await handleRegister(name, username, password)
-                setMessage(result || "user Registered Successfully !!")
-                console.log(`Result : ${result}`)
-                setError('') // this makes sure no previous error messages are shown in case of success
-                setUsername('');
-                setName('');
-                setPassword('');
-
-            }
-            // Login
-            if(formState === 0){
-                let result = await handleLogin(username, password)
-                console.log(`Result : ${result}`)
-                setMessage("Login Successful !!!")                
+                setMessage(result || "User Registered Successfully !!")
                 setError('')
                 setUsername('');
                 setName('');
                 setPassword('');
-                // wait for the success animation to complete and then route to the home page
-                setTimeout(()=>{
+            }
+            
+            if(formState === 0){
+                let result = await handleLogin(username, password)
+                setMessage("Access Granted. Redirecting...")                
+                setError('')
+                setUsername('');
+                setName('');
+                setPassword('');
+                setTimeout(() => {
                     router("/home")
-                }, 2000)
+                }, 1500)
             }
         }
         catch(err){
             if(err && err.response && err.response.data && err.response.data.message){
                 setError(err.response.data.message)
+            } else {
+                setError('Authentication Failed. Please try again !!!')
             }
-            else{
-                setError('Something went wrong. Please try again !!!')
-            }
-            setMessage(''); // this makes sure no extra success messages are displayed in case of some error 
+            setMessage('');
         }
     }
 
     return (
-        <>          
-            <div className="auth-content">
-                
-                <div className="auth-container">
+        <div className="auth-zenith-root">
+            {/* Zenith Atmospheric Background */}
+            <div className="zenith-bg">
+                <div className="aurora aurora-1"></div>
+                <div className="aurora aurora-2"></div>
+                <div className="aurora aurora-3"></div>
+                <div className="grain-overlay"></div>
+            </div>
 
+            <div className="zenith-content-scroller">
+                <div className="zenith-form-stack">
+                    
+                    {/* Atmospheric Header */}
+                    <header className="zenith-heading">
+                        <div ref={containerRef} className="zenith-title-proxy">
+                            <VariableProximity
+                                label={'Welcome to NexMeet'}
+                                className={'zenith-proximity-label'}
+                                fromFontVariationSettings="'wght' 100, 'opsz' 9"
+                                toFontVariationSettings="'wght' 900, 'opsz' 40"
+                                containerRef={containerRef}
+                                radius={200}
+                                falloff="linear"
+                            />
+                        </div>
+                    </header>
+
+                    {/* Dynamic Feedback */}
                     {(message || error) && (
-                        <div className="message-container slideDownBounce">
-                            {message && <p className="success-message">{message}</p>}
-                            {error && <p className="error-message">{error}</p>}
+                        <div className="zenith-alert-host">
+                            <div className={`zenith-alert-badge ${message ? 'success' : 'error'}`}>
+                                <span className="alert-shimmer"></span>
+                                {message || error}
+                            </div>
                         </div>
                     )}
 
-                    <div className="headingWrapper">
-                        <div
-                            ref={containerRef}
-                            style={{
-                                position: 'relative',
-                                width: '100%',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                marginTop: "2rem",
-                                color: "black"
-                            }}
-                            >
-                                <VariableProximity
-                                    label={'Welcome to NexMeet'}
-                                    className={'variable-proximity-demo'}
-                                    fromFontVariationSettings="'wght' 400, 'opsz' 9"
-                                    toFontVariationSettings="'wght' 1000, 'opsz' 40"
-                                    containerRef={containerRef}
-                                    radius={100}
-                                    falloff="linear"
-                                    style={{ fontSize: '3rem', textAlign: 'center' , color: 'white'}} 
-                                />
-                        </div>
-                    </div>
+                    {/* The Zenith Card */}
+                    <main className="zenith-card">
+                        <div className="zenith-card-inner">
+                            <div className="border-beam"></div>
+                            
+                            {/* Navigation Tabs */}
+                            <nav className="zenith-tabs">
+                                <button 
+                                    onClick={() => setFormState(0)} 
+                                    className={`zenith-tab ${formState === 0 ? 'active' : ''}`}
+                                >
+                                    Login
+                                </button>
+                                <button 
+                                    onClick={() => setFormState(1)} 
+                                    className={`zenith-tab ${formState === 1 ? 'active' : ''}`}
+                                >
+                                    Register
+                                </button>
+                                <div className={`zenith-tab-glider state-${formState}`}></div>
+                            </nav>
 
-                    <div className="auth-wrapper">                    
-
-                        {/* Toggle Buttons */}
-                        <div className="auth-toggle">
-                            <button 
-                                onClick={() => setFormState(0)} 
-                                className={`toggle-btn ${formState === 0 ? 'active' : ''}`}
-                            >
-                                <span>Sign In</span>
-                            </button>
-                            <button 
-                                onClick={() => setFormState(1)} 
-                                className={`toggle-btn ${formState === 1 ? 'active' : ''}`}
-                            >
-                                <span>Register</span>
-                            </button>
-                            <div className={`toggle-slider ${formState === 1 ? 'slide-right' : 'slide-left'}`}></div>
-                        </div>
-
-                        {/* Form Container */}
-                        <div className="form-container">
-                            <div className="form-body">
-                                {/* Form Fields */}
-                                <div className="form-fields">
-                                    {formState === 1 ? (
-                                        <div className="form-field">
-                                            <div className="input-wrapper">
-                                                <svg className="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                                    <circle cx="12" cy="7" r="4"/>
-                                                </svg>
+                            {/* Main Form Fields */}
+                            <form className="zenith-form" onSubmit={handleSubmit}>
+                                <div className="zenith-fields-container">
+                                    {formState === 1 && (
+                                        <div className="zenith-field-wrap staggered-1">
+                                            <div className="zenith-input-shell">
                                                 <input 
-                                                    onChange={(event) => {
-                                                        setName(event.target.value)
-                                                    }} 
+                                                    onChange={(e) => setName(e.target.value)} 
                                                     type="text" 
-                                                    name="name" 
-                                                    id="name" 
-                                                    placeholder="Enter your full name"
-                                                    className="form-input"
+                                                    placeholder=" "
+                                                    className="zenith-input"
                                                     value={name}
+                                                    required
                                                 />
+                                                <label className="zenith-label">Full Name</label>
+                                                <div className="zenith-focus-light"></div>
                                             </div>
                                         </div>
-                                    ) : <></>}
+                                    )}
                                     
-                                    <div className="form-field">
-                                        <div className="input-wrapper">
-                                            <svg className="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                                <polyline points="22,6 12,13 2,6"/>
-                                            </svg>
+                                    <div className="zenith-field-wrap staggered-2">
+                                        <div className="zenith-input-shell">
                                             <input 
-                                                onChange={(event) => {
-                                                    setUsername(event.target.value)
-                                                }} 
+                                                onChange={(e) => setUsername(e.target.value)} 
                                                 type="text" 
-                                                placeholder="Enter your username" 
-                                                id="username"
-                                                className="form-input"
+                                                placeholder=" " 
+                                                className="zenith-input"
                                                 value={username}
+                                                required
                                             />
+                                            <label className="zenith-label">Username</label>
+                                            <div className="zenith-focus-light"></div>
                                         </div>
                                     </div>
 
-                                    <div className="form-field">
-                                        <div className="input-wrapper">
-                                            <svg className="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                                <circle cx="12" cy="16" r="1"/>
-                                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                                            </svg>
+                                    <div className="zenith-field-wrap staggered-3">
+                                        <div className="zenith-input-shell">
                                             <input 
-                                                onChange={(event) => {
-                                                    setPassword(event.target.value)
-                                                }} 
+                                                onChange={(e) => setPassword(e.target.value)} 
                                                 type={showPassword ? "text" : "password"}
-                                                placeholder="Enter password" 
-                                                id="password"
-                                                className="form-input"
+                                                placeholder=" " 
+                                                className="zenith-input"
                                                 value={password}
+                                                required
                                             />
+                                            <label className="zenith-label">Password</label>
                                             <button
                                                 type="button"
                                                 onClick={() => setShowPassword(!showPassword)}
-                                                className="password-toggle"
+                                                className="zenith-eye-toggle"
                                             >
                                                 {showPassword ? (
-                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                                                        <path d="m1 1 22 22"/>
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="m1 1 22 22"/>
                                                     </svg>
                                                 ) : (
-                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                                        <circle cx="12" cy="12" r="3"/>
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
                                                     </svg>
                                                 )}
                                             </button>
+                                            <div className="zenith-focus-light"></div>
                                         </div>
                                     </div>
 
-                                    {/* Submit Button */}
-                                    {/* <button className="submit-btn" onClick={handleSubmit}>
-                                        <span>{formState === 0 ? 'Sign In' : 'Create Account'}</span>
-                                        <svg className="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                            <line x1="5" y1="12" x2="19" y2="12"/>
-                                            <polyline points="12,5 19,12 12,19"/>
-                                        </svg>
-                                    </button> */}
-
-                                    <div style={{display: "flex", justifyContent: "center", alignItems: "center", fontSize: "medium"}} className="submitButton">
-                                            <Button
-                                            text={formState === 0 ? "Login" : "Register"}
-                                            onClick={handleSubmit}
-                                            />
+                                    <div className="zenith-action staggered-4">
+                                        <button type="submit" className="zenith-submit">
+                                            <span className="zenith-submit-text">
+                                                {formState === 0 ? "Login" : "Register"}
+                                            </span>
+                                            <span className="zenith-submit-beam"></span>
+                                        </button>
                                     </div>
                                     
                                 </div>
-
-                            
-                            </div>
+                            </form>
                         </div>
-                    </div>
+                    </main>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 
